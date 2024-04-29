@@ -1,11 +1,16 @@
-import { getAllCities } from "../../utils/cities.js"
+import { getAllCities, insertPopularCities } from "../../utils/cities.js"
 
-/////////////////       Variavles       \\\\\\\\\\\\\\\\\\\\
-const popularCitiesContainer = document.querySelector('#popular-cities')
+/////////////////       Variavles       \\\\\\\\\\\\\\\\\\\
 const cities = await getAllCities()
 
 /////////////////       Functions       \\\\\\\\\\\\\\\\\\\\
-
+const renderPopularCities = () => {
+  const popularCities = cities.filter(city => city.popular)
+  console.log(popularCities);
+  insertPopularCities(popularCities)
+}
 
 /////////////////       Events / Codes       \\\\\\\\\\\\\\\\\\\\
-console.log(cities);
+console.log("All Cities =>", cities);
+
+renderPopularCities()
