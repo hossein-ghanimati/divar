@@ -5,7 +5,7 @@ const getAllCities = async () => {
   return response.data.cities;
 };
 
-const generatePopularCitiesTemplate = city => {
+const generatePopularCitiyTemplate = city => {
   return `
     <li class="main__cities-item">
         <p class="main__cities-link">
@@ -21,7 +21,7 @@ const insertPopularCities = cities => {
   cities.forEach(city => {
     popularCitiesContainer.insertAdjacentHTML(
       "beforeend",
-      generatePopularCitiesTemplate(city)
+      generatePopularCitiyTemplate(city)
     );
   });
 };

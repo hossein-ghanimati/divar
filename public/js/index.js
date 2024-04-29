@@ -6,7 +6,8 @@ const cities = await getAllCities()
 /////////////////       Functions       \\\\\\\\\\\\\\\\\\\\
 const renderPopularCities = () => {
   const popularCities = cities.filter(city => city.popular)
-  console.log(popularCities);
+  console.log("Popular Cities => ", popularCities);
+  
   insertPopularCities(popularCities)
 }
 
