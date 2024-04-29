@@ -1,5 +1,5 @@
 import { hideLoader } from "../../utils/shared.js";
 
-window.addEventListener('load', () => {
-    hideLoader();
-})
+window.addEventListener("load", () => {
+  hideLoader();
+});
