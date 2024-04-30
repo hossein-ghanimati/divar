@@ -2,20 +2,21 @@ import {
   getAllCities,
   insertPopularCities,
   searchCities,
-  insertSearchedCities,} from "../../utils/cities.js";
+  insertSearchedCities,
+} from "../../utils/cities.js";
+import { getFromLocal } from "../../utils/shared.js";
 
-/////////////////       Variavles       \\\\\\\\\\\\\\\\\\\
-const cities = await getAllCities();
+// /////////////////       Variavles       \\\\\\\\\\\\\\\\\\\
 
-/////////////////       Functions       \\\\\\\\\\\\\\\\\\\\
-const renderPopularCities = () => {
+// /////////////////       Functions       \\\\\\\\\\\\\\\\\\\\
+const renderPopularCities = cities => {
   const popularCities = cities.filter((city) => city.popular);
   console.log("Popular Cities => ", popularCities);
 
   insertPopularCities(popularCities);
 };
 
-const renderCitiesSearching = () => {
+const renderCitiesSearching = cities => {
   const searchedCitiesContainer = document.querySelector(
     ".search-result-cities"
   );
@@ -35,8 +36,22 @@ const renderCitiesSearching = () => {
   });
 };
 
-/////////////////       Events / Codes       \\\\\\\\\\\\\\\\\\\\
-console.log("All Cities =>", cities);
+const citiesFuncsHandler = async () => {
+  const cities = await getAllCities();
+  console.log("All Cities =>", cities);
 
-renderCitiesSearching()
-renderPopularCities();
+  renderPopularCities(cities);
+  renderCitiesSearching(cities);
+};
+
+/////////////////       Events / Codes       \\\\\\\\\\\\\\\\\\\\
+
+window.addEventListener("load", async () => {
+  const selectedCities = getFromLocal('cities');
+  
+  if (selectedCities?.length) {
+    location.href = './pages/posts.html'
+  }
+});
+
+citiesFuncsHandler()

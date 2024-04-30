@@ -10,6 +10,6 @@ const renderSocials = async () => {
 
 
 renderSocials() 
-window.addEventListener("load", () => {
+window.addEventListener("load", async () => {
   hideLoader();
 });
