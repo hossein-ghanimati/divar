@@ -1,4 +1,5 @@
 import { getPosts, insertPosts, getCategories, insertCategories} from "../../utils/posts.js";
+import { hideLoader } from "../../utils/shared.js";
 
 /////////////////       Variavles       \\\\\\\\\\\\\\\\\\\
 
@@ -18,7 +19,14 @@ const renderCategories = async () => {
   insertCategories(categories)
 }
 
-/////////////////       Events / Codes       \\\\\\\\\\\\\\\\\\\
-renderPosts()
 
-renderCategories()
+const pageFuncsHandler = async () => {
+  renderCategories()
+  await renderPosts()
+}
+/////////////////       Events / Codes       \\\\\\\\\\\\\\\\\\\
+window.addEventListener('load', async () => {
+  await pageFuncsHandler();
+  hideLoader();
+})
+

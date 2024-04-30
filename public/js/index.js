@@ -4,7 +4,7 @@ import {
   searchCities,
   insertSearchedCities,
 } from "../../utils/cities.js";
-import { getFromLocal } from "../../utils/shared.js";
+import { getFromLocal, hideLoader } from "../../utils/shared.js";
 
 // /////////////////       Variavles       \\\\\\\\\\\\\\\\\\\
 
@@ -36,7 +36,7 @@ const renderCitiesSearching = cities => {
   });
 };
 
-const citiesFuncsHandler = async () => {
+const pageFuncsHandler = async () => {
   const cities = await getAllCities();
   console.log("All Cities =>", cities);
 
@@ -52,6 +52,7 @@ window.addEventListener("load", async () => {
   if (selectedCities?.length) {
     location.href = './pages/posts.html'
   }
+  await pageFuncsHandler()
+  hideLoader();
 });
 
-citiesFuncsHandler()

@@ -1,4 +1,3 @@
-import { hideLoader } from "../../utils/shared.js";
 import { getAllSocials, insertSocials } from "../../utils/socials.js";
 
 const renderSocials = async () => {
@@ -10,6 +9,4 @@ const renderSocials = async () => {
 
 
 renderSocials() 
-window.addEventListener("load", async () => {
-  hideLoader();
-});
+

@@ -1,4 +1,4 @@
-import { getFromLocal, mainURL, coverURL } from "./shared.js"
+import { getFromLocal, mainURL, coverURL, addParamToUrl, calculateRelativeTimeDifference } from "./shared.js"
 
 const getPosts = async () => {
   const userCities = getFromLocal('cities');
@@ -9,6 +9,8 @@ const getPosts = async () => {
 }
 
 const generatePostTemplate = post => {
+  const date = calculateRelativeTimeDifference(post.createdAt)
+
   return `
     <div class="col-4">
       <a href="post.html/id=${post._id}" class="product-card">
@@ -27,7 +29,7 @@ const generatePostTemplate = post => {
                   : post.price.toLocaleString() + " تومان"
               }
             </span>
-            <span class="product-card__time">Date</span>
+            <span class="product-card__time">${date}</span>
           </div>
         </div>
         <div class="product-card__left">
@@ -73,9 +75,13 @@ const getCategories = async () => {
   return response.data.categories
 }
 
+const categoryClickHandler = categoryID => {
+  addParamToUrl('categoryID', categoryID)
+}
+
 const generateCategoryTemplate = category => {
   return`
-    <div class="sidebar__category-link" id="category-${category._id}">
+    <div class="sidebar__category-link" id="category-${category._id}" onclick="categoryClickHandler('${category._id}')">
       <div class="sidebar__category-link_details">
         <i class="sidebar__category-icon bi bi-home"></i>
         <p>${category.title}</p>
@@ -92,6 +98,7 @@ const insertCategories = categories => {
   })
 }
 
+window.categoryClickHandler = categoryClickHandler
 export {
   getPosts,
   insertPosts,
