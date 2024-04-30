@@ -9,7 +9,6 @@ const getPosts = async () => {
 }
 
 const generatePostTemplate = post => {
-  console.log(post);
   return `
     <div class="col-4">
       <a href="post.html/id=${post._id}" class="product-card">
@@ -68,7 +67,34 @@ const insertPosts = posts => {
   }
 }
 
+const getCategories = async () => {
+  const getReq = await fetch(`${mainURL}/category`)
+  const response = await getReq.json()
+  return response.data.categories
+}
+
+const generateCategoryTemplate = category => {
+  return`
+    <div class="sidebar__category-link" id="category-${category._id}">
+      <div class="sidebar__category-link_details">
+        <i class="sidebar__category-icon bi bi-home"></i>
+        <p>${category.title}</p>
+      </div>    
+    </div>
+  `
+}
+
+const insertCategories = categories => {
+  const categoriesContainer = document.querySelector('#categories-container')
+
+  categories.forEach(category => {
+    categoriesContainer.insertAdjacentHTML('beforeend', generateCategoryTemplate(category))
+  })
+}
+
 export {
   getPosts,
-  insertPosts
+  insertPosts,
+  getCategories,
+  insertCategories
 }

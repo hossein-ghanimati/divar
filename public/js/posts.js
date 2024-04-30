@@ -1,13 +1,20 @@
-import { getPosts, insertPosts } from "../../utils/posts.js";
+import { getPosts, insertPosts, getCategories, insertCategories} from "../../utils/posts.js";
 
 /////////////////       Variavles       \\\\\\\\\\\\\\\\\\\
-const posts = await getPosts()
 
 
 /////////////////       Functions       \\\\\\\\\\\\\\\\\\\
-const renderPosts = () => {
+const renderPosts = async () => {
+  const posts = await getPosts()
   insertPosts(posts)
+}
+
+const renderCategories = async () => {
+  const categories = await getCategories();
+  insertCategories(categories)
 }
 
 /////////////////       Events / Codes       \\\\\\\\\\\\\\\\\\\
 renderPosts()
+
+renderCategories()
