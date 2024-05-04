@@ -43,7 +43,7 @@ const generatePostTemplate = post => {
             : `
               <img
                 class="product-card__img img-fluid"
-                src="./images/main/noPicture.PNG"
+                src="../public/images/main/noPicture.PNG"
               />`
         }
                   
