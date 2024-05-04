@@ -1,15 +1,22 @@
-import { getFromLocal, mainURL, coverURL, addParamToUrl, calculateRelativeTimeDifference } from "./shared.js"
+import {
+  getFromLocal,
+  mainURL,
+  coverURL,
+  setParamToUrl,
+  calculateRelativeTimeDifference,
+  getUrlParam,
+} from "./shared.js";
 
 const getPosts = async () => {
-  const userCities = getFromLocal('cities');
-  const userCitiesIDs = userCities.map(city => city.id).join(' ');
-  const getPostsReq = await fetch(`${mainURL}/post/?city=${userCitiesIDs}`)
-  const response = await getPostsReq.json()
-  return response.data.posts
-}
+  const userCities = getFromLocal("cities");
+  const userCitiesIDs = userCities.map((city) => city.id).join(" ");
+  const getPostsReq = await fetch(`${mainURL}/post/?city=${userCitiesIDs}`);
+  const response = await getPostsReq.json();
+  return response.data.posts;
+};
 
-const generatePostTemplate = post => {
-  const date = calculateRelativeTimeDifference(post.createdAt)
+const generatePostTemplate = (post) => {
+  const date = calculateRelativeTimeDifference(post.createdAt);
 
   return `
     <div class="col-4">
@@ -50,58 +57,151 @@ const generatePostTemplate = post => {
         </div>
       </a>
     </div>
-  `
-}
+  `;
+};
 
-const insertPosts = posts => {
-  const postsContainer = document.querySelector('#posts-container')
+const insertPosts = (posts) => {
+  const postsContainer = document.querySelector("#posts-container");
 
   if (posts.length) {
-    posts.forEach(post => {
-      postsContainer.insertAdjacentHTML('beforeend', generatePostTemplate(post))
+    posts.forEach((post) => {
+      postsContainer.insertAdjacentHTML(
+        "beforeend",
+        generatePostTemplate(post)
+      );
     });
-  }else{
-    postsContainer.insertAdjacentHTML('beforeend', `
+  } else {
+    postsContainer.insertAdjacentHTML(
+      "beforeend",
+      `
       <p class="empty">
         پستی یافت نشد ..
       </p>
-    `)
+    `
+    );
   }
-}
+};
 
 const getCategories = async () => {
-  const getReq = await fetch(`${mainURL}/category`)
-  const response = await getReq.json()
-  return response.data.categories
-}
+  const getReq = await fetch(`${mainURL}/category`);
+  const response = await getReq.json();
+  return response.data.categories;
+};
 
-const categoryClickHandler = categoryID => {
-  addParamToUrl('categoryID', categoryID)
-}
+const categoryClickHandler = (categoryID) => {
+  setParamToUrl("categoryID", categoryID);
+};
 
-const generateCategoryTemplate = category => {
-  return`
+const generateCategoryTemplate = (category) => {
+  return `
     <div class="sidebar__category-link" id="category-${category._id}" onclick="categoryClickHandler('${category._id}')">
       <div class="sidebar__category-link_details">
         <i class="sidebar__category-icon bi bi-home"></i>
         <p>${category.title}</p>
       </div>    
     </div>
+  `;
+};
+
+const insertMainCategories = (categories) => {
+  const categoriesContainer = document.querySelector("#categories-container");
+
+  categories.forEach((category) => {
+    categoriesContainer.insertAdjacentHTML(
+      "beforeend",
+      generateCategoryTemplate(category)
+    );
+  });
+};
+
+const generateSubCategoryTemplate= subCategory => {
+  console.log("Sub => ", subCategory);
+  return `
+    <li onclick="categoryClickHandler('${subCategory._id}')" 
+    class="${
+      getUrlParam('categoryID') == subCategory._id ? 'active-subCategory' : ''
+    }"
+    >
+      ${subCategory.title}
+    </li>
   `
 }
 
-const insertCategories = categories => {
-  const categoriesContainer = document.querySelector('#categories-container')
+const generateChildCategoryTemplate = childCategory => {
+  return `
+  <div class="all-categories">
+    <p onclick="categoryClickHandler('')">همه اگهی ها</p>
+    <i class="bi bi-arrow-right"></i>
+  </div>
 
-  categories.forEach(category => {
-    categoriesContainer.insertAdjacentHTML('beforeend', generateCategoryTemplate(category))
-  })
+  <div class="sidebar__category-link active-category" href="#">
+    <div class="sidebar__category-link_details">
+      <i class="sidebar__category-icon bi bi-house"></i>
+      <p onclick="categoryClickHandler('${childCategory._id}')">${childCategory.title}</p>
+    </div>
+    <ul class="subCategory-list">
+      ${
+        childCategory.subCategories.map(generateSubCategoryTemplate).join('')
+      }
+    </ul>
+  </div>
+  `;
+};
+
+const insertChildCategory = (childCategory) => {
+  const categoriesContainer = document.querySelector("#categories-container");
+
+  categoriesContainer.insertAdjacentHTML('beforeend', generateChildCategoryTemplate(childCategory))
+};
+
+const getCategory = (categories, categoryID) => {
+  return categories.find(
+    (category) => category._id == categoryID
+  );
 }
 
-window.categoryClickHandler = categoryClickHandler
+const getChildCategory= (categories, categoryID) => {
+  const category = categories.find(category => {
+    return (category?.subCategories?.find(childCategory => {
+      return childCategory._id == categoryID
+    }))
+  })
+
+  const childCategory = category?.subCategories?.find(childCategory => {
+    return childCategory._id == categoryID
+  })
+
+  return childCategory
+}
+
+const getSubParentCategory = (categories, categoryID) => {
+  const category = categories.find(category => {
+    return (category.subCategories.find(childCategory => {
+      return childCategory.subCategories.find(subCategory => {
+        return subCategory._id == categoryID
+      })
+    }))
+  })
+
+  const childCategory = category.subCategories.find(childCategory => {
+    return childCategory.subCategories.find(subCategory => {
+      return subCategory._id == categoryID
+    })
+  })
+
+  
+
+  return childCategory
+}
+
+window.categoryClickHandler = categoryClickHandler;
 export {
   getPosts,
   insertPosts,
   getCategories,
-  insertCategories
-}
+  insertMainCategories,
+  insertChildCategory,
+  getCategory,
+  getChildCategory,
+  getSubParentCategory
+};
