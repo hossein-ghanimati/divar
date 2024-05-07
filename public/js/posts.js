@@ -3,10 +3,7 @@ import {
   insertPosts,
   getCategories,
   insertMainCategories,
-  insertChildCategory,
-  getCategory,
-  getChildCategory,
-  getSubParentCategory
+  handelMainCategories,
 } from "../../utils/posts.js";
 import { getUrlParam, hideLoader } from "../../utils/shared.js";
 
@@ -25,26 +22,9 @@ const renderCategories = async () => {
   const categories = await getCategories();
   console.log("Categories =>", categories);
 
+  // If We Clicked On A Category
   if (categoryID) {
-    const categoryInfos = getCategory(categories, categoryID);
-    const isMainCategory = categoryInfos ? true : false;
-    
-    if (isMainCategory) {
-      console.log("Category Infos =>", categoryInfos);
-      insertChildCategory(categoryInfos);
-    }else {
-      const childCategoryInfos = getChildCategory(categories, categoryID);
-      const isChildCategory = childCategoryInfos ? true : false;
-      
-      if (isChildCategory) {
-        console.log("Child Category Infos =>", childCategoryInfos);
-        insertChildCategory(childCategoryInfos)
-      }else{
-        const subParentCategory = getSubParentCategory(categories, categoryID)
-        console.log("Sub Parent Category Infos =>", subParentCategory);
-        insertChildCategory(subParentCategory)
-      }
-    }
+    handelMainCategories(categories, categoryID);
   } else {
     insertMainCategories(categories);
   }

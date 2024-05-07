@@ -29,11 +29,23 @@ const getUrlParam = (param) => {
   return  urlParams.get(param);
 };
 
+const removeUrlParam = param => {
+  const urlParams = new URLSearchParams(location.search);
+  const url = new URL(location.href);
+
+  urlParams.delete(param);
+  
+  url.search = urlParams.toString();
+
+  location.href = url.toString();
+}
+
 const calculateRelativeTimeDifference = (createdAt) => {
   const currentTime = new Date();
   const createdTime = new Date(createdAt);
   const time = currentTime - createdTime;
-  const second = 100;
+  // console.log(time);
+  const second = 1000;
   const minute = second * 60;
   const hour = minute * 60;
   const day = hour * 24;
@@ -55,6 +67,7 @@ const calculateRelativeTimeDifference = (createdAt) => {
     const calculatedTime = Math.floor(time / day);
     date = `${calculatedTime} روز پیش`;
   } else if (time < month) {
+    
     const calculatedTime = Math.floor(time / week);
     date = `${calculatedTime} هفته پیش`;
   } else if (time < year) {
@@ -68,6 +81,15 @@ const calculateRelativeTimeDifference = (createdAt) => {
   return date;
 };
 
+const hideElem = (elem) => {
+  elem.style.display = 'none';
+}
+
+const showElem = (elem, display = "block") => {
+  elem.style.display = display
+}
+
+
 export {
   mainURL,
   coverURL,
@@ -77,4 +99,8 @@ export {
   setParamToUrl,
   getUrlParam,
   calculateRelativeTimeDifference,
+  removeUrlParam,
+  hideElem,
+  showElem
 };
+

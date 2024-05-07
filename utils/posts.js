@@ -5,6 +5,7 @@ import {
   setParamToUrl,
   calculateRelativeTimeDifference,
   getUrlParam,
+  removeUrlParam,
 } from "./shared.js";
 
 const getPosts = async () => {
@@ -13,6 +14,10 @@ const getPosts = async () => {
   const getPostsReq = await fetch(`${mainURL}/post/?city=${userCitiesIDs}`);
   const response = await getPostsReq.json();
   return response.data.posts;
+};
+
+const backToAllCategories = () => {
+  removeUrlParam("categoryID");
 };
 
 const generatePostTemplate = (post) => {
@@ -114,94 +119,121 @@ const insertMainCategories = (categories) => {
   });
 };
 
-const generateSubCategoryTemplate= subCategory => {
+const generateSubCategoryTemplate = (subCategory) => {
   console.log("Sub => ", subCategory);
   return `
     <li onclick="categoryClickHandler('${subCategory._id}')" 
     class="${
-      getUrlParam('categoryID') == subCategory._id ? 'active-subCategory' : ''
+      getUrlParam("categoryID") == subCategory._id ? "active-subCategory" : ""
     }"
     >
       ${subCategory.title}
     </li>
-  `
-}
+  `;
+};
 
-const generateChildCategoryTemplate = childCategory => {
+const generateChildCategoryTemplate = (childCategory) => {
   return `
-  <div class="all-categories">
-    <p onclick="categoryClickHandler('')">همه اگهی ها</p>
+  <div class="all-categories" onclick="backToAllCategories('')">
+    <p>همه اگهی ها</p>
     <i class="bi bi-arrow-right"></i>
   </div>
 
   <div class="sidebar__category-link active-category" href="#">
     <div class="sidebar__category-link_details">
       <i class="sidebar__category-icon bi bi-house"></i>
-      <p onclick="categoryClickHandler('${childCategory._id}')">${childCategory.title}</p>
+      <p onclick="categoryClickHandler('${childCategory._id}')">${
+    childCategory.title
+  }</p>
     </div>
     <ul class="subCategory-list">
-      ${
-        childCategory.subCategories.map(generateSubCategoryTemplate).join('')
-      }
+      ${childCategory.subCategories.map(generateSubCategoryTemplate).join("")}
     </ul>
   </div>
   `;
 };
 
-const insertChildCategory = (childCategory) => {
+const insertChildCategories = (childCategory) => {
   const categoriesContainer = document.querySelector("#categories-container");
 
-  categoriesContainer.insertAdjacentHTML('beforeend', generateChildCategoryTemplate(childCategory))
+  categoriesContainer.insertAdjacentHTML(
+    "beforeend",
+    generateChildCategoryTemplate(childCategory)
+  );
 };
 
 const getCategory = (categories, categoryID) => {
-  return categories.find(
-    (category) => category._id == categoryID
-  );
-}
+  return categories.find((category) => category._id == categoryID);
+};
 
-const getChildCategory= (categories, categoryID) => {
-  const category = categories.find(category => {
-    return (category?.subCategories?.find(childCategory => {
-      return childCategory._id == categoryID
-    }))
-  })
+const getChildCategory = (categories, categoryID) => {
+  const category = categories.find((category) => {
+    return category?.subCategories?.find((childCategory) => {
+      return childCategory._id == categoryID;
+    });
+  });
 
-  const childCategory = category?.subCategories?.find(childCategory => {
-    return childCategory._id == categoryID
-  })
+  const childCategory = category?.subCategories?.find((childCategory) => {
+    return childCategory._id == categoryID;
+  });
 
-  return childCategory
-}
+  return childCategory;
+};
 
 const getSubParentCategory = (categories, categoryID) => {
-  const category = categories.find(category => {
-    return (category.subCategories.find(childCategory => {
-      return childCategory.subCategories.find(subCategory => {
-        return subCategory._id == categoryID
-      })
-    }))
-  })
+  const category = categories.find((category) => {
+    return category.subCategories.find((childCategory) => {
+      return childCategory.subCategories.find((subCategory) => {
+        return subCategory._id == categoryID;
+      });
+    });
+  });
 
-  const childCategory = category.subCategories.find(childCategory => {
-    return childCategory.subCategories.find(subCategory => {
-      return subCategory._id == categoryID
-    })
-  })
+  const childCategory = category.subCategories.find((childCategory) => {
+    return childCategory.subCategories.find((subCategory) => {
+      return subCategory._id == categoryID;
+    });
+  });
 
+  return childCategory;
+};
+
+const handelSubParentCategory = (categories, categoryID) => {
+  const subParentCategory = getSubParentCategory(categories, categoryID);
+
+  console.log("Sub Parent Category Infos =>", subParentCategory);
+  insertChildCategories(subParentCategory);
+};
+
+const handelChildCategories = (categories, categoryID) => {
+  const childCategoryInfos = getChildCategory(categories, categoryID);
+  const isChildCategory = childCategoryInfos ? true : false;
+
+  if (isChildCategory) {
+    console.log("Child Category Infos =>", childCategoryInfos);
+    insertChildCategories(childCategoryInfos);
+  } else {
+    handelSubParentCategory(categories, categoryID);
+  }
+};
+
+const handelMainCategories = (categories, categoryID) => {
+  const categoryInfos = getCategory(categories, categoryID);
+  const isMainCategory = categoryInfos ? true : false;
   
-
-  return childCategory
+  if (isMainCategory) {
+    console.log("Category Infos =>", categoryInfos);
+    insertChildCategories(categoryInfos);
+  }else {
+    handelChildCategories(categories, categoryID)
+  }
 }
-
 window.categoryClickHandler = categoryClickHandler;
+window.backToAllCategories = backToAllCategories;
 export {
   getPosts,
   insertPosts,
   getCategories,
   insertMainCategories,
-  insertChildCategory,
-  getCategory,
-  getChildCategory,
-  getSubParentCategory
+  handelMainCategories
 };
