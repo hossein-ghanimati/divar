@@ -1,4 +1,4 @@
-import { getUrlParam, hideElem, removeUrlParam, setParamToUrl, showElem } from "../../utils/shared.js";
+import { getFromLocal, getUrlParam, hideElem, removeUrlParam, setIntoLocal, setParamToUrl, showElem } from "../../utils/shared.js";
 import { getAllSocials, insertSocials } from "../../utils/shared-app/socials.js";
 import { mostSearchedsHandler, searchInputHandler } from "../../utils/shared-app/global-search.js";
 
@@ -37,8 +37,25 @@ const formsPreventDefault = () => {
   })
 }
 
+const renderHeaderCities = () => {
+  const headerCitiesTitle = document.querySelector('#header-city-title')
+  let cities = getFromLocal('cities')
+
+  if (!cities?.length) {
+    setIntoLocal('cities', [{title : 'تهران', id: '301'}])
+    cities = getFromLocal('cities')
+  }
+
+  if (cities.length > 1) {
+    headerCitiesTitle.innerHTML = `${cities.length} شهر`
+  }else{
+    headerCitiesTitle.innerHTML = cities[0].title
+  }
+
+}
 ///////    Calling Functions    \\\\\\\\\
-formsPreventDefault()
-renderSocials() 
+renderHeaderCities()
 renderGlobalSearch()
+renderSocials() 
+formsPreventDefault()
 

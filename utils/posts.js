@@ -13,7 +13,7 @@ const generateGetPostUrl = () => {
   const categoryID = getUrlParam("categoryID");
   const searchedValue = getUrlParam("searched");
   const userCities = getFromLocal("cities");
-  const userCitiesIDs = userCities.map((city) => city.id).join(" ");
+  const userCitiesIDs = userCities?.length && userCities?.map((city) => city.id)?.join(" ") || 301;
 
   let url = `${mainURL}/post/?city=${userCitiesIDs}`;
 

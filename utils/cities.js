@@ -6,7 +6,7 @@ const getAllCities = async () => {
 };
 
 const cityClickHandler = (cityName, cityID) => {
-  setIntoLocal("cities", [{name : cityName, id : cityID}]);
+  setIntoLocal("cities", [{title : cityName, id : cityID}]);
   location.href = './pages/posts.html'
 }
 
