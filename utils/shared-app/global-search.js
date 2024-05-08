@@ -1,4 +1,4 @@
-import { hideModal, showModal } from "../shared.js";
+import { hideModal, setParamToUrl, showModal } from "../shared.js";
 
 const searchInputHandler = () => {
   const value = event.target.value.trim();
@@ -17,12 +17,7 @@ const searchInputHandler = () => {
 
 ////   Start Most Searched Functions
 const mostSearchClickHandler = searched => {
-  const url = new URL(location.href)
-  let searchParams = new URLSearchParams(location.search)
-  searchParams.set('searched', searched)
-
-  url.search = searchParams.toString()
-  location.href = url.toString()
+  setParamToUrl('searched', searched)
 }
 
 const generateSearchedItemTemplate = searched => {

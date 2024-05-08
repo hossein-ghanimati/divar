@@ -15,23 +15,29 @@ const generateGetPostUrl = () => {
   const userCities = getFromLocal("cities");
   const userCitiesIDs = userCities.map((city) => city.id).join(" ");
 
-  let url = `${mainURL}/post/?city=${userCitiesIDs}`
+  let url = `${mainURL}/post/?city=${userCitiesIDs}`;
 
   if (categoryID) {
-    url += `&categoryId=${categoryID}`
+    url += `&categoryId=${categoryID}`;
   }
   if (searchedValue) {
-    url += `&search=${searchedValue}`
+    url += `&search=${searchedValue}`;
   }
 
-  return url
-}
+  return url;
+};
 
+let dynamicFilters = {};
+
+let mainPosts = null;
+let backupPosts = null;
 const getPosts = async () => {
-  const url = generateGetPostUrl()
+  const url = generateGetPostUrl();
 
   const getPostsReq = await fetch(url);
   const response = await getPostsReq.json();
+  backupPosts = response.data.posts;
+  mainPosts = response.data.posts;
   return response.data.posts;
 };
 
@@ -86,6 +92,7 @@ const generatePostTemplate = (post) => {
 
 const insertPosts = (posts) => {
   const postsContainer = document.querySelector("#posts-container");
+  postsContainer.innerHTML = "";
 
   if (posts.length) {
     posts.forEach((post) => {
@@ -162,8 +169,8 @@ const generateChildCategoryTemplate = (childCategory) => {
     <div class="sidebar__category-link_details">
       <i class="sidebar__category-icon bi bi-house"></i>
       <p onclick="categoryClickHandler('${childCategory._id}')">${
-        childCategory.title
-      }</p>
+    childCategory.title
+  }</p>
     </div>
     <ul class="subCategory-list">
       ${childCategory.subCategories.map(generateSubCategoryTemplate).join("")}
@@ -263,7 +270,7 @@ const generateCheckboxFilterTemplate = (filter) => {
   return `
   <div class="sidebar__filter">
     <label class="switch">
-      <input id="exchange_controll" class="icon-controll" type="checkbox" />
+      <input class="icon-controll filter" type="checkbox" />
       <span class="slider round"></span>
     </label>
     <p>${filter.name}</p>
@@ -283,9 +290,7 @@ const generateSelectboxFilterTemplate = (filter) => {
             aria-expanded="false"
             aria-controls="accordion-${filter.name}"
           >
-            <span class="sidebar__filter-title">${
-              filter.name
-            }</span>
+            <span class="sidebar__filter-title">${filter.name}</span>
           </button>
         </h2>
         <div
@@ -295,35 +300,150 @@ const generateSelectboxFilterTemplate = (filter) => {
           data-bs-parent="#accordionFlushExample"
         >
           <div class="accordion-body">
-            <select class="selectbox">
+            <select class="selectbox" onchange="dynamicSelectFiltersApplyHandler(event.target.value, '${filter.slug}')">
+              <option value='default'>پیش فرض</option>
               ${filter.options
                 .sort((a, b) => b - a)
                 .map(
-                  (option) =>
-                    `<option value='${option}'>${option}</option>`
+                  (option) => `<option value='${option}'>${option}</option>`
                 )}
             </select>
           </div>
         </div>
       </div>
     </div>
-  `
+  `;
 };
 
-const insertFilters = (filters) => {
+const insertFilters = filters => {
   const filtersConstainer = document.querySelector("#sidebar-filters");
 
   filters.forEach((filter) => {
     if (filter.type == "checkbox") {
-      filtersConstainer.insertAdjacentHTML('afterbegin', generateCheckboxFilterTemplate(filter))
+      filtersConstainer.insertAdjacentHTML(
+        "afterbegin",
+        generateCheckboxFilterTemplate(filter)
+      );
     } else if (filter.type == "selectbox") {
-      filtersConstainer.insertAdjacentHTML('afterbegin', generateSelectboxFilterTemplate(filter))
+      filtersConstainer.insertAdjacentHTML(
+        "afterbegin",
+        generateSelectboxFilterTemplate(filter)
+      );
     }
   });
 };
 
+const filterByJustPic = posts => {
+  const justPhotoController = document.querySelector("#just_photo_controll");
+  let filteredPosts = [...posts]
+  if (justPhotoController.checked) {
+    filteredPosts = posts.filter((post) => post.pics.length);
+  }
+
+  return filteredPosts
+};
+
+const filterByExcheng = posts => {
+  const exchangeController = document.querySelector("#exchange_controll");
+  let filteredPosts = [...posts]
+
+  if (exchangeController.checked) {
+    filteredPosts = posts.filter((post) => post.exchange);
+  }
+
+  return filteredPosts
+}
+
+const filterByMinMaxPrice = posts => {
+  const minPrice = document.querySelector('#min-price-selectbox').value
+  const maxPrice = document.querySelector('#max-price-selectbox').value
+  let filteredPosts = [...posts]
+
+  if (minPrice != "default") {
+    if (maxPrice != "default") {
+      // Min And Max Price Filtering
+      filteredPosts = filteredPosts.filter(post => post.price >= minPrice && post.price <= maxPrice)
+    }else{
+      // Min Price Filtering
+      filteredPosts = filteredPosts.filter(post => post.price >= minPrice)
+    }
+  }else{
+    if (maxPrice != "default") {
+      // Max Price Filtering
+      filteredPosts = filteredPosts.filter(post => post.price <= maxPrice)
+    }
+  }
+
+  return filteredPosts
+}
+
+const filterByDynamicFileds = posts => {
+  let filteredPosts = [...posts];
+
+  for (const slug in dynamicFilters) {
+    if (dynamicFilters[slug] == "default") continue
+    filteredPosts = filteredPosts.filter(post => {
+      return post.dynamicFields.some(field => {
+      
+        return field.slug == slug && field.data == dynamicFilters[slug]
+      })
+    })
+    
+  }
+  return filteredPosts
+}
+
+const applyAllFilterings = () => {
+  let filteredPosts = [...backupPosts];
+  
+  filteredPosts = filterByJustPic(filteredPosts);
+  filteredPosts = filterByExcheng(filteredPosts);
+  filteredPosts = filterByMinMaxPrice(filteredPosts);
+  filteredPosts = filterByDynamicFileds(filteredPosts)
+  
+  return filteredPosts
+};
+
+const staticCheckFiltersApplyHandler = () => {
+  const staticCheckControllers = document.querySelectorAll(
+    ".static-check-controller"
+  );
+  
+  staticCheckControllers.forEach((controller) => {
+    controller.addEventListener("change", () => {
+
+      const filteredPosts = applyAllFilterings()    
+      insertPosts(filteredPosts);
+    });
+  });
+};
+
+const staticSelectFiltersApplyHandler = () => {
+  const staticSelectors = document.querySelectorAll(".static-selector");
+
+  staticSelectors.forEach(selector => {
+    selector.addEventListener("change", () => {
+
+      const filteredPosts = applyAllFilterings()
+      insertPosts(filteredPosts);
+    })
+  })
+};
+
+const dynamicSelectFiltersApplyHandler = (value, slug) => {
+  dynamicFilters[slug] = value;
+
+
+
+  const filteredPosts = applyAllFilterings()
+  insertPosts(filteredPosts)
+};
+
+const dynamicCheckFiltersApplyHandler = () => {};
+
 window.categoryClickHandler = categoryClickHandler;
 window.backToAllCategories = backToAllCategories;
+window.dynamicSelectFiltersApplyHandler = dynamicSelectFiltersApplyHandler
 export {
   getPosts,
   insertPosts,
@@ -331,4 +451,7 @@ export {
   insertMainCategories,
   handelMainCategories,
   insertFilters,
+  staticCheckFiltersApplyHandler,
+  staticSelectFiltersApplyHandler,
+  dynamicCheckFiltersApplyHandler,
 };

@@ -4,7 +4,10 @@ import {
   getCategories,
   insertMainCategories,
   handelMainCategories,
-  insertFilters
+  insertFilters,
+  staticCheckFiltersApplyHandler,
+  staticSelectFiltersApplyHandler,
+  dynamicCheckFiltersApplyHandler,
 } from "../../utils/posts.js";
 import { getFromLocal, getUrlParam, hideLoader, setIntoLocal } from "../../utils/shared.js";
 
@@ -45,10 +48,17 @@ const renderFilters = () => {
   insertFilters(categoryFilters.reverse())  
 }
 
+const filstersApplyHandler = () => {
+  staticCheckFiltersApplyHandler();
+  staticSelectFiltersApplyHandler();
+  dynamicCheckFiltersApplyHandler();
+}
+
 const pageFuncsHandler = async () => {
   await renderPosts();
   await renderCategories();
-  renderFilters();
+  await renderFilters();
+  filstersApplyHandler()
 };
 /////////////////       Events / Codes       \\\\\\\\\\\\\\\\\\\
 window.addEventListener("load", async () => {
