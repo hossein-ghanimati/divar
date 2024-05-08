@@ -10,9 +10,17 @@ import {
 } from "./shared.js";
 
 const getPosts = async () => {
+  const categoryID = getUrlParam("categoryID");
   const userCities = getFromLocal("cities");
   const userCitiesIDs = userCities.map((city) => city.id).join(" ");
-  const getPostsReq = await fetch(`${mainURL}/post/?city=${userCitiesIDs}`);
+
+  let url = `${mainURL}/post/?city=${userCitiesIDs}`
+
+  if (categoryID) {
+    url += `&categoryId=${categoryID}`
+  }
+
+  const getPostsReq = await fetch(url);
   const response = await getPostsReq.json();
   return response.data.posts;
 };
@@ -144,8 +152,8 @@ const generateChildCategoryTemplate = (childCategory) => {
     <div class="sidebar__category-link_details">
       <i class="sidebar__category-icon bi bi-house"></i>
       <p onclick="categoryClickHandler('${childCategory._id}')">${
-    childCategory.title
-  }</p>
+        childCategory.title
+      }</p>
     </div>
     <ul class="subCategory-list">
       ${childCategory.subCategories.map(generateSubCategoryTemplate).join("")}
