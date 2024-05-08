@@ -6,6 +6,7 @@ import {
   calculateRelativeTimeDifference,
   getUrlParam,
   removeUrlParam,
+  setIntoLocal,
 } from "./shared.js";
 
 const getPosts = async () => {
@@ -180,7 +181,7 @@ const getChildCategory = (categories, categoryID) => {
   return childCategory;
 };
 
-const getSubParentCategory = (categories, categoryID) => {
+const getSubCategory = (categories, categoryID) => {
   const category = categories.find((category) => {
     return category.subCategories.find((childCategory) => {
       return childCategory.subCategories.find((subCategory) => {
@@ -195,14 +196,21 @@ const getSubParentCategory = (categories, categoryID) => {
     });
   });
 
-  return childCategory;
+  const subCategory = childCategory.subCategories.find(
+    (subCategory) => subCategory._id == categoryID
+  );
+
+  return subCategory;
 };
 
 const handelSubParentCategory = (categories, categoryID) => {
-  const subParentCategory = getSubParentCategory(categories, categoryID);
+  const subCategory = getSubCategory(categories, categoryID);
+  const subParentCategory = getChildCategory(categories, subCategory.parent);
 
-  console.log("Sub Parent Category Infos =>", subParentCategory);
   insertChildCategories(subParentCategory);
+  setIntoLocal("category", subCategory);
+
+  console.log("Sub Category Infos =>", subCategory);
 };
 
 const handelChildCategories = (categories, categoryID) => {
@@ -210,8 +218,10 @@ const handelChildCategories = (categories, categoryID) => {
   const isChildCategory = childCategoryInfos ? true : false;
 
   if (isChildCategory) {
-    console.log("Child Category Infos =>", childCategoryInfos);
     insertChildCategories(childCategoryInfos);
+    setIntoLocal("category", childCategoryInfos);
+
+    console.log("Child Category Infos =>", childCategoryInfos);
   } else {
     handelSubParentCategory(categories, categoryID);
   }
@@ -220,14 +230,80 @@ const handelChildCategories = (categories, categoryID) => {
 const handelMainCategories = (categories, categoryID) => {
   const categoryInfos = getCategory(categories, categoryID);
   const isMainCategory = categoryInfos ? true : false;
-  
+
   if (isMainCategory) {
-    console.log("Category Infos =>", categoryInfos);
     insertChildCategories(categoryInfos);
-  }else {
-    handelChildCategories(categories, categoryID)
+    setIntoLocal("category", categoryInfos);
+
+    console.log("Category Infos =>", categoryInfos);
+  } else {
+    handelChildCategories(categories, categoryID);
   }
-}
+};
+
+const generateCheckboxFilterTemplate = (filter) => {
+  return `
+  <div class="sidebar__filter">
+    <label class="switch">
+      <input id="exchange_controll" class="icon-controll" type="checkbox" />
+      <span class="slider round"></span>
+    </label>
+    <p>${filter.name}</p>
+  </div>
+  `;
+};
+const generateSelectboxFilterTemplate = (filter) => {
+  return `
+    <div class="accordion accordion-flush" id="accordionFlushExample">
+      <div class="accordion-item">
+        <h2 class="accordion-header">
+          <button
+            class="accordion-button collapsed"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#accordion-${filter.slug}"
+            aria-expanded="false"
+            aria-controls="accordion-${filter.name}"
+          >
+            <span class="sidebar__filter-title">${
+              filter.name
+            }</span>
+          </button>
+        </h2>
+        <div
+          id="accordion-${filter.slug}"
+          class="accordion-collapse collapse"
+          aria-labelledby="accordion-${filter.name}"
+          data-bs-parent="#accordionFlushExample"
+        >
+          <div class="accordion-body">
+            <select class="selectbox">
+              ${filter.options
+                .sort((a, b) => b - a)
+                .map(
+                  (option) =>
+                    `<option value='${option}'>${option}</option>`
+                )}
+            </select>
+          </div>
+        </div>
+      </div>
+    </div>
+  `
+};
+
+const insertFilters = (filters) => {
+  const filtersConstainer = document.querySelector("#sidebar-filters");
+
+  filters.forEach((filter) => {
+    if (filter.type == "checkbox") {
+      filtersConstainer.insertAdjacentHTML('afterbegin', generateCheckboxFilterTemplate(filter))
+    } else if (filter.type == "selectbox") {
+      filtersConstainer.insertAdjacentHTML('afterbegin', generateSelectboxFilterTemplate(filter))
+    }
+  });
+};
+
 window.categoryClickHandler = categoryClickHandler;
 window.backToAllCategories = backToAllCategories;
 export {
@@ -235,5 +311,6 @@ export {
   insertPosts,
   getCategories,
   insertMainCategories,
-  handelMainCategories
+  handelMainCategories,
+  insertFilters,
 };

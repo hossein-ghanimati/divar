@@ -4,14 +4,17 @@ import {
   getCategories,
   insertMainCategories,
   handelMainCategories,
+  insertFilters
 } from "../../utils/posts.js";
-import { getUrlParam, hideLoader } from "../../utils/shared.js";
+import { getFromLocal, getUrlParam, hideLoader, setIntoLocal } from "../../utils/shared.js";
 
 /////////////////       Variavles       \\\\\\\\\\\\\\\\\\\
+let mainPosts = null;
 
 /////////////////       Functions       \\\\\\\\\\\\\\\\\\\
 const renderPosts = async () => {
   const posts = await getPosts();
+  mainPosts = posts
   console.log("Posts =>", posts);
 
   insertPosts(posts);
@@ -20,19 +23,32 @@ const renderPosts = async () => {
 const renderCategories = async () => {
   const categoryID = getUrlParam("categoryID");
   const categories = await getCategories();
-  console.log("Categories =>", categories);
-
+  
   // If We Clicked On A Category
   if (categoryID) {
     handelMainCategories(categories, categoryID);
   } else {
+    setIntoLocal('category', categories)
     insertMainCategories(categories);
+
+    console.log("Categories =>", categories);
   }
+
+  
 };
 
+const renderFilters = () => {
+  const categoryFilters = getFromLocal('category')?.filters;
+  if (!categoryFilters?.length) return false;
+  
+
+  insertFilters(categoryFilters.reverse())  
+}
+
 const pageFuncsHandler = async () => {
-  renderCategories();
   await renderPosts();
+  await renderCategories();
+  renderFilters();
 };
 /////////////////       Events / Codes       \\\\\\\\\\\\\\\\\\\
 window.addEventListener("load", async () => {
