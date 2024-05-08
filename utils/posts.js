@@ -9,8 +9,9 @@ import {
   setIntoLocal,
 } from "./shared.js";
 
-const getPosts = async () => {
+const generateGetPostUrl = () => {
   const categoryID = getUrlParam("categoryID");
+  const searchedValue = getUrlParam("searched");
   const userCities = getFromLocal("cities");
   const userCitiesIDs = userCities.map((city) => city.id).join(" ");
 
@@ -19,6 +20,15 @@ const getPosts = async () => {
   if (categoryID) {
     url += `&categoryId=${categoryID}`
   }
+  if (searchedValue) {
+    url += `&search=${searchedValue}`
+  }
+
+  return url
+}
+
+const getPosts = async () => {
+  const url = generateGetPostUrl()
 
   const getPostsReq = await fetch(url);
   const response = await getPostsReq.json();

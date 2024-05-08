@@ -1,5 +1,6 @@
 import { getUrlParam, hideElem, removeUrlParam, setParamToUrl, showElem } from "../../utils/shared.js";
-import { getAllSocials, insertSocials } from "../../utils/socials.js";
+import { getAllSocials, insertSocials } from "../../utils/shared-app/socials.js";
+import { mostSearchedsHandler, searchInputHandler } from "../../utils/shared-app/global-search.js";
 
 const renderSocials = async () => {
   const socials = await getAllSocials();
@@ -12,29 +13,19 @@ const renderGlobalSearch = () => {
   const input = document.querySelector('#global_search_input');
   const removeInputValueIcon = document.querySelector('#remove-search-value-icon')
   const searchedParam = getUrlParam('searched')
+  
+  mostSearchedsHandler()
 
   if(!input) return false
+
   if (searchedParam) showElem(removeInputValueIcon)
 
   input.value = searchedParam || '';
 
-  input.addEventListener('keyup', e => {
-    const value = e.target.value.trim();
-    if (value == ''){
-      hideElem(removeInputValueIcon);
-      return false
-    }else{
-      showElem(removeInputValueIcon);
-    }
+  input.addEventListener('keyup', searchInputHandler)
 
-    if (e.keyCode == 13) {
-      setParamToUrl('searched', value)
-    }
-  })
+  removeInputValueIcon.addEventListener('click', () => removeUrlParam('searched'))
 
-  removeInputValueIcon.addEventListener('click', () => {
-    removeUrlParam('searched')
-  })
 }
 
 const formsPreventDefault = () => {

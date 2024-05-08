@@ -1,4 +1,4 @@
-import { mainURL, coverURL } from "./shared.js"
+import { mainURL, coverURL } from "../shared.js"
 
 const getAllSocials = async () => {
   const getReq = await fetch(`${mainURL}/social`)

@@ -89,6 +89,16 @@ const showElem = (elem, display = "block") => {
   elem.style.display = display
 }
 
+const showModal = (selector, className) => {
+  const modal = document.querySelector(selector)
+  modal.classList.add(className)
+}
+
+const hideModal = (selector, className) => {
+  const modal = document.querySelector(selector)
+  modal.classList.remove(className)
+}
+
 
 export {
   mainURL,
@@ -101,6 +111,8 @@ export {
   calculateRelativeTimeDifference,
   removeUrlParam,
   hideElem,
-  showElem
+  showElem,
+  showModal,
+  hideModal
 };
 
