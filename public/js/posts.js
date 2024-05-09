@@ -26,6 +26,8 @@ const renderPosts = async () => {
 const renderCategories = async () => {
   const categoryID = getUrlParam("categoryID");
   const categories = await getCategories();
+  const categoriesContainer = document.querySelector('#categories-container')
+  categoriesContainer.innerHTML = ''
   
   // If We Clicked On A Category
   if (categoryID) {
@@ -65,3 +67,8 @@ window.addEventListener("load", async () => {
   await pageFuncsHandler();
   hideLoader();
 });
+
+
+export {
+  pageFuncsHandler
+}

@@ -1,6 +1,7 @@
-import { getFromLocal, getUrlParam, hideElem, removeUrlParam, setIntoLocal, setParamToUrl, showElem } from "../../utils/shared.js";
+import { getFromLocal, getUrlParam, hideElem, hideModal, removeUrlParam, setIntoLocal, setParamToUrl, showElem, showModal } from "../../utils/shared.js";
 import { getAllSocials, insertSocials } from "../../utils/shared-app/socials.js";
 import { mostSearchedsHandler, searchInputHandler } from "../../utils/shared-app/global-search.js";
+import { deleteAllCitiesHandler, loadSelectedCities, modalAcceptBtnHandler, renderAllProvinces, renderProvinseCities } from "../../utils/shared-app/cities-modal.js";
 
 const renderSocials = async () => {
   const socials = await getAllSocials();
@@ -13,10 +14,10 @@ const renderGlobalSearch = () => {
   const input = document.querySelector('#global_search_input');
   const removeInputValueIcon = document.querySelector('#remove-search-value-icon')
   const searchedParam = getUrlParam('searched')
+  if(!input) return false
   
   mostSearchedsHandler()
 
-  if(!input) return false
 
   if (searchedParam) showElem(removeInputValueIcon)
 
@@ -39,6 +40,7 @@ const formsPreventDefault = () => {
 
 const renderHeaderCities = () => {
   const headerCitiesTitle = document.querySelector('#header-city-title')
+  if (!headerCitiesTitle) return false
   let cities = getFromLocal('cities')
 
   if (!cities?.length) {
@@ -53,9 +55,39 @@ const renderHeaderCities = () => {
   }
 
 }
+
+const renderCitiesModal = () => {
+  const modalActiveClass = "city-modal--active"
+  const modalID = "#city-modal"
+  const modalOpenBtn = document.querySelector('.header__city')
+  const modalCloseBtn = document.querySelector('.city-modal__close')
+  const modalAcceptBtn = document.querySelector('.city-modal__accept')
+  const modal = document.querySelector(modalID)
+
+  deleteAllCitiesHandler()
+
+  modalOpenBtn.addEventListener('click', async () => {
+    setIntoLocal('edited-cities', getFromLocal('cities'))
+    await renderAllProvinces()
+    renderProvinseCities()
+    loadSelectedCities()
+    showModal(modalID, modalActiveClass)
+  })
+  modalCloseBtn.addEventListener('click', () => hideModal(modalID, modalActiveClass))
+  modalAcceptBtn.addEventListener('click', () => {
+    hideModal(modalID, modalActiveClass)
+    modalAcceptBtnHandler()
+  })
+}
 ///////    Calling Functions    \\\\\\\\\
 renderHeaderCities()
+renderCitiesModal()
 renderGlobalSearch()
 renderSocials() 
 formsPreventDefault()
 
+
+
+export{
+  renderHeaderCities
+}

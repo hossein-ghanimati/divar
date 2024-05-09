@@ -13,7 +13,8 @@ const generateGetPostUrl = () => {
   const categoryID = getUrlParam("categoryID");
   const searchedValue = getUrlParam("searched");
   const userCities = getFromLocal("cities");
-  const userCitiesIDs = userCities?.length && userCities?.map((city) => city.id)?.join(" ") || 301;
+  const userCitiesIDs = userCities?.length && userCities?.map((city) => city.id)?.join("|") || 301;
+  console.log(userCitiesIDs);
 
   let url = `${mainURL}/post/?city=${userCitiesIDs}`;
 
@@ -316,7 +317,8 @@ const generateSelectboxFilterTemplate = (filter) => {
 };
 
 const insertFilters = filters => {
-  const filtersConstainer = document.querySelector("#sidebar-filters");
+  const filtersConstainer = document.querySelector("#sidebar-filters .dynamics");
+  filtersConstainer.innerHTML = ''
 
   filters.forEach((filter) => {
     if (filter.type == "checkbox") {
