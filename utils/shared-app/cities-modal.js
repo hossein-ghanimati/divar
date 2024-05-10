@@ -136,13 +136,16 @@ const generateSelectedCityTemplate = (city) => {
 };
 
 const loadSelectedCities = (city) => {
+  const modalAcceptBtn = document.querySelector('#city-modal__accept')
   selectedCitiesContainer.innerHTML = "";
   const selectedCities = city || getFromLocal("cities");
 
   if (selectedCities.length) {
     showElem(selectedCitiesDeleteBtn);
+    modalAcceptBtn.classList.replace('city-modal__accept', 'city-modal__accept--active')
   } else {
     hideElem(selectedCitiesDeleteBtn);
+    modalAcceptBtn.classList.replace('city-modal__accept--active', 'city-modal__accept')
   }
 
   selectedCities.forEach((city) => {
@@ -207,6 +210,7 @@ const generateProvinceCityTemplate = (city, isSelected = false) => {
 
 const insertProvinceCities = (provinceName, provinceCities) => {
   modalCitiesContainer.innerHTML = "";
+  modalCitiesContainer.scrollTo(0, 0)
   const selectedCities = getFromLocal("edited-cities");
   const areAllCities = provinceCities.every((selectedCity) => {
     return selectedCities.some((city) => city.id == selectedCity.id);

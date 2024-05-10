@@ -929,13 +929,14 @@ display: block !important;
 .city-modal__accept {
   background-color: #f5f5f5;
   cursor: pointer;
-  /* pointer-events: none;  */
+  pointer-events: none; 
 }
 
 .city-modal__accept--active {
   background-color: #a62626;
   color:#fff;
   font-family: "iransans-bold";
+  pointer-events: auto;
 }
 
 #city_modal_error{
