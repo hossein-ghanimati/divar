@@ -137,15 +137,18 @@ const generateSelectedCityTemplate = (city) => {
 
 const loadSelectedCities = (city) => {
   const modalAcceptBtn = document.querySelector('#city-modal__accept')
+  const modalErrorElem = document.querySelector('#city_modal_error')
   selectedCitiesContainer.innerHTML = "";
   const selectedCities = city || getFromLocal("cities");
 
   if (selectedCities.length) {
     showElem(selectedCitiesDeleteBtn);
     modalAcceptBtn.classList.replace('city-modal__accept', 'city-modal__accept--active')
+    modalErrorElem.style.display = 'none'
   } else {
     hideElem(selectedCitiesDeleteBtn);
     modalAcceptBtn.classList.replace('city-modal__accept--active', 'city-modal__accept')
+    modalErrorElem.style.display = 'block'
   }
 
   selectedCities.forEach((city) => {
