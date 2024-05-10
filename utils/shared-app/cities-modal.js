@@ -139,11 +139,24 @@ const loadSelectedCities = (city) => {
   const modalAcceptBtn = document.querySelector('#city-modal__accept')
   const modalErrorElem = document.querySelector('#city_modal_error')
   selectedCitiesContainer.innerHTML = "";
-  const selectedCities = city || getFromLocal("cities");
+  const localCities = getFromLocal('cities')
+  const selectedCities = city || localCities
+  const areCitiesSame = 
+    localCities.every(localCity => {
+      return selectedCities.some(selectCity => {
+        return selectCity.id == localCity.id
+      })
+    })
+    &&
+    localCities.length == selectedCities.length
 
   if (selectedCities.length) {
     showElem(selectedCitiesDeleteBtn);
-    modalAcceptBtn.classList.replace('city-modal__accept', 'city-modal__accept--active')
+    if (!areCitiesSame){
+      modalAcceptBtn.classList.replace('city-modal__accept', 'city-modal__accept--active')
+    }else{
+      modalAcceptBtn.classList.replace('city-modal__accept--active', 'city-modal__accept')
+    }
     modalErrorElem.style.display = 'none'
   } else {
     hideElem(selectedCitiesDeleteBtn);

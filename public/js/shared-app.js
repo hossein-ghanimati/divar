@@ -63,7 +63,7 @@ const renderCitiesModal = () => {
   if (!modalOpenBtn) return false
   const modalCloseBtn = document.querySelector('.city-modal__close')
   const modalAcceptBtn = document.querySelector('.city-modal__accept')
-  const modal = document.querySelector(modalID)
+  const modalOverly = document.querySelector('.city-modal__overlay')
 
   deleteAllCitiesHandler()
   renderCitiesSearching()
@@ -83,6 +83,12 @@ const renderCitiesModal = () => {
     hideModal(modalID, modalActiveClass)
     modalAcceptBtnHandler()
   })
+
+  modalOverly.addEventListener('click', () => {
+    hideModal(modalID, modalActiveClass)
+    setIntoLocal('edited-cities', getFromLocal('cities'))
+  })
+  // console.log(modalCloseBtn.addEventListener);
 }
 ///////    Calling Functions    \\\\\\\\\
 renderHeaderCities()
