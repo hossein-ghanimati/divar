@@ -5,6 +5,7 @@ import {
   insertSearchedCities,
 } from "../../utils/cities.js";
 import { getFromLocal, hideLoader } from "../../utils/shared.js";
+import { getAllSocials, insertSocials } from "../../utils/shared-app/socials.js";
 
 // /////////////////       Variavles       \\\\\\\\\\\\\\\\\\\
 
@@ -36,10 +37,18 @@ const renderCitiesSearching = cities => {
   });
 };
 
+const renderSocials = async () => {
+  const socials = await getAllSocials();
+  console.log("Socials =>", socials);
+
+  insertSocials(socials)
+}
+
 const pageFuncsHandler = async () => {
   const cities = await getAllCities();
   console.log("All Cities =>", cities);
 
+  renderSocials()
   renderPopularCities(cities);
   renderCitiesSearching(cities);
 };

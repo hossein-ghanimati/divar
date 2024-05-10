@@ -1,7 +1,7 @@
+import { deleteAllCitiesHandler, loadSelectedCities, modalAcceptBtnHandler, renderAllProvinces, renderCitiesSearching, renderProvinseCities } from "../../utils/shared-app/cities-modal.js";
 import { getFromLocal, getUrlParam, hideElem, hideModal, removeUrlParam, setIntoLocal, setParamToUrl, showElem, showModal } from "../../utils/shared.js";
 import { getAllSocials, insertSocials } from "../../utils/shared-app/socials.js";
 import { mostSearchedsHandler, searchInputHandler } from "../../utils/shared-app/global-search.js";
-import { deleteAllCitiesHandler, loadSelectedCities, modalAcceptBtnHandler, renderAllProvinces, renderProvinseCities } from "../../utils/shared-app/cities-modal.js";
 
 const renderSocials = async () => {
   const socials = await getAllSocials();
@@ -44,7 +44,7 @@ const renderHeaderCities = () => {
   let cities = getFromLocal('cities')
 
   if (!cities?.length) {
-    setIntoLocal('cities', [{title : 'تهران', id: '301'}])
+    setIntoLocal('cities', [{title : 'تهران', id: '301', province_id: 8}])
     cities = getFromLocal('cities')
   }
 
@@ -60,11 +60,13 @@ const renderCitiesModal = () => {
   const modalActiveClass = "city-modal--active"
   const modalID = "#city-modal"
   const modalOpenBtn = document.querySelector('.header__city')
+  if (!modalOpenBtn) return false
   const modalCloseBtn = document.querySelector('.city-modal__close')
   const modalAcceptBtn = document.querySelector('.city-modal__accept')
   const modal = document.querySelector(modalID)
 
   deleteAllCitiesHandler()
+  renderCitiesSearching()
 
   modalOpenBtn.addEventListener('click', async () => {
     setIntoLocal('edited-cities', getFromLocal('cities'))
@@ -73,7 +75,10 @@ const renderCitiesModal = () => {
     loadSelectedCities()
     showModal(modalID, modalActiveClass)
   })
-  modalCloseBtn.addEventListener('click', () => hideModal(modalID, modalActiveClass))
+  modalCloseBtn.addEventListener('click', () => {
+    hideModal(modalID, modalActiveClass)
+    setIntoLocal('edited-cities', getFromLocal('cities'))
+  })
   modalAcceptBtn.addEventListener('click', () => {
     hideModal(modalID, modalActiveClass)
     modalAcceptBtnHandler()
@@ -89,5 +94,5 @@ formsPreventDefault()
 
 
 export{
-  renderHeaderCities
+  renderHeaderCities,
 }

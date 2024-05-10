@@ -14,7 +14,6 @@ const generateGetPostUrl = () => {
   const searchedValue = getUrlParam("searched");
   const userCities = getFromLocal("cities");
   const userCitiesIDs = userCities?.length && userCities?.map((city) => city.id)?.join("|") || 301;
-  console.log(userCitiesIDs);
 
   let url = `${mainURL}/post/?city=${userCitiesIDs}`;
 

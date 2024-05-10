@@ -64,6 +64,7 @@ const pageFuncsHandler = async () => {
 };
 /////////////////       Events / Codes       \\\\\\\\\\\\\\\\\\\
 window.addEventListener("load", async () => {
+  if (!location.pathname.endsWith('posts.html')) return false
   await pageFuncsHandler();
   hideLoader();
 });

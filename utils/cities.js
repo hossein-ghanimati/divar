@@ -5,14 +5,18 @@ const getAllCities = async () => {
   return response.data.cities;
 };
 
-const cityClickHandler = (cityName, cityID) => {
-  setIntoLocal("cities", [{title : cityName, id : cityID}]);
+const cityClickHandler = (cityName, cityID, cityProvince) => {
+  setIntoLocal("cities", [{
+    title : cityName,
+    id : cityID,
+    province_id: cityProvince
+  }]);
   location.href = './pages/posts.html'
 }
 
 const generatePopularCitiyTemplate = city => {
   return `
-    <li class="main__cities-item" onclick="cityClickHandler('${city.name}', '${city.id}')">
+    <li class="main__cities-item" onclick="cityClickHandler('${city.name}', ${city.id}, ${city.province_id})">
         <p class="main__cities-link">
             ${city.name}
         </p>
@@ -42,7 +46,7 @@ const generateSearhcedCitiesTemplate = (city, status) => {
 
   if (status.wasAny) {
     template = `
-      <li onclick="cityClickHandler('${city.name}', '${city.id}')">
+      <li onclick="cityClickHandler('${city.name}', ${city.id}, ${city.province_id})">
         ${city.name}
       </li>
     `
