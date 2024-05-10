@@ -54,6 +54,13 @@ const renderHeaderCities = () => {
     headerCitiesTitle.innerHTML = cities[0].title
   }
 
+  if (cities.length < 4) {
+    const citiesName = cities.map(city => city.title)
+    document.title = `دیوار ${citiesName.join(' و ')}: مرجع انواع نیازمندی و آگهی‌های نو و دست دو در شهر ${citiesName.join(' و ')}`
+  }else{
+    document.title = `دیوار ${cities.length} شهر: مرجع انواع نیازمندی و آگهی‌های نو و دست دو در ${cities.length} شهر`
+  }
+
 }
 
 const renderCitiesModal = () => {
@@ -90,9 +97,30 @@ const renderCitiesModal = () => {
   })
   // console.log(modalCloseBtn.addEventListener);
 }
+
+const renderCategoriesModal = () => {
+  const modalID = "#header__category-menu"
+  const modalActiveClass = "header__category-menu--active"
+  const modalOpenBtn = document.querySelector('.header__category-btn')
+  const backToAllCategoriesBtn = document.querySelector('#all-categories-posts')
+  const modalOverly = document.querySelector('.category_modal_overlay')
+
+  modalOpenBtn.addEventListener('click', () => {
+    showModal(modalID, modalActiveClass)
+  })
+
+  modalOverly.addEventListener('click', () => {
+    hideModal(modalID, modalActiveClass)
+  })
+
+  backToAllCategoriesBtn.addEventListener('click', () => {
+    removeUrlParam('categoryID')
+  })
+}
 ///////    Calling Functions    \\\\\\\\\
 renderHeaderCities()
 renderCitiesModal()
+renderCategoriesModal()
 renderGlobalSearch()
 renderSocials() 
 formsPreventDefault()

@@ -141,14 +141,7 @@ const loadSelectedCities = (city) => {
   selectedCitiesContainer.innerHTML = "";
   const localCities = getFromLocal('cities')
   const selectedCities = city || localCities
-  const areCitiesSame = 
-    localCities.every(localCity => {
-      return selectedCities.some(selectCity => {
-        return selectCity.id == localCity.id
-      })
-    })
-    &&
-    localCities.length == selectedCities.length
+  const areCitiesSame = JSON.stringify(localCities) == JSON.stringify(selectedCities)
 
   if (selectedCities.length) {
     showElem(selectedCitiesDeleteBtn);
@@ -202,6 +195,7 @@ const generateModalProvinceTemplate = (province) => {
 
 const renderAllProvinces = async () => {
   modalCitiesContainer.innerHTML = "";
+  modalCitiesContainer.scrollTo(0, 0)
   allCities?.provinces?.forEach((province) => {
     modalCitiesContainer.insertAdjacentHTML(
       "beforeend",
