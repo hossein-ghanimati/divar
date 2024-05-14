@@ -455,4 +455,5 @@ export {
   staticCheckFiltersApplyHandler,
   staticSelectFiltersApplyHandler,
   dynamicCheckFiltersApplyHandler,
+  categoryClickHandler
 };

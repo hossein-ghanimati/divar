@@ -2,6 +2,7 @@ import { deleteAllCitiesHandler, loadSelectedCities, modalAcceptBtnHandler, rend
 import { getFromLocal, getUrlParam, hideElem, hideModal, removeUrlParam, setIntoLocal, setParamToUrl, showElem, showModal } from "../../utils/shared.js";
 import { getAllSocials, insertSocials } from "../../utils/shared-app/socials.js";
 import { mostSearchedsHandler, searchInputHandler } from "../../utils/shared-app/global-search.js";
+import { insertModalCategories } from "../../utils/shared-app/categories-modal.js";
 
 const renderSocials = async () => {
   const socials = await getAllSocials();
@@ -104,6 +105,9 @@ const renderCategoriesModal = () => {
   const modalOpenBtn = document.querySelector('.header__category-btn')
   const backToAllCategoriesBtn = document.querySelector('#all-categories-posts')
   const modalOverly = document.querySelector('.category_modal_overlay')
+
+
+  insertModalCategories()
 
   modalOpenBtn.addEventListener('click', () => {
     showModal(modalID, modalActiveClass)
