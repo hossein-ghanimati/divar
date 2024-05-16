@@ -99,6 +99,21 @@ const hideModal = (selector, className) => {
   modal.classList.remove(className)
 }
 
+const checkLogin = () => {
+  return true
+}
+
+const showSwal = (title, text, buttons, callback) => {
+  swal({
+    title,
+    text,
+    buttons,
+    closeButton,
+  }).then(result =>{
+    callback(result)
+  })
+}
+
 
 export {
   mainURL,
@@ -113,6 +128,8 @@ export {
   hideElem,
   showElem,
   showModal,
-  hideModal
+  hideModal,
+  checkLogin,
+  showSwal
 };
 

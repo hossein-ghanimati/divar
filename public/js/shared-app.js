@@ -118,7 +118,14 @@ const renderCategoriesModal = () => {
   })
 
   backToAllCategoriesBtn.addEventListener('click', () => {
-    removeUrlParam('categoryID')
+    location.href = "./posts.html"
+  })
+}
+
+const renderModalClostion = () => {
+  const loginModalCloseBtn = document.querySelector('.login-modal__header-btn')
+  loginModalCloseBtn.addEventListener('click', () => {
+    hideModal('#login-modal', 'login-modal--active')
   })
 }
 ///////    Calling Functions    \\\\\\\\\
@@ -128,6 +135,7 @@ renderCategoriesModal()
 renderGlobalSearch()
 renderSocials() 
 formsPreventDefault()
+renderModalClostion()
 
 
 
