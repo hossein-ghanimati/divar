@@ -99,16 +99,21 @@ const hideModal = (selector, className) => {
   modal.classList.remove(className)
 }
 
-const checkLogin = () => {
-  return true
+const getToken = () => {
+  return getFromLocal('divar-token')
 }
 
-const showSwal = (title, text, buttons, callback) => {
+const checkLogin = () => {
+  const token = getToken()
+  return !!token
+}
+
+const showSwal = (title, text, icon, buttons, callback) => {
   swal({
     title,
     text,
+    icon,
     buttons,
-    closeButton,
   }).then(result =>{
     callback(result)
   })
@@ -130,6 +135,7 @@ export {
   showModal,
   hideModal,
   checkLogin,
-  showSwal
+  showSwal,
+  getToken
 };
 

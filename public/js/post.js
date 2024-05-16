@@ -28,7 +28,8 @@ const renderPostInfo = async () => {
 
   const phoneInfoBtn = document.querySelector('#phone-info-btn')
   phoneInfoBtn.addEventListener('click', () => {
-    showSwal('اطلاعات تماس:', post.creator.phone, "تماس گرفتن", () =>  {
+    showSwal('اطلاعات تماس:', post.creator.phone,null, "تماس گرفتن", (result) =>  {
+      if (!result) return false
       alert(post.creator.phone)
     })
   })

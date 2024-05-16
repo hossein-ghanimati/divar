@@ -1,8 +1,9 @@
 import { deleteAllCitiesHandler, loadSelectedCities, modalAcceptBtnHandler, renderAllProvinces, renderCitiesSearching, renderProvinseCities } from "../../utils/shared-app/cities-modal.js";
-import { getFromLocal, getUrlParam, hideElem, hideModal, removeUrlParam, setIntoLocal, setParamToUrl, showElem, showModal } from "../../utils/shared.js";
+import { checkLogin, getFromLocal, getUrlParam, hideElem, hideModal, removeUrlParam, setIntoLocal, setParamToUrl, showElem, showModal } from "../../utils/shared.js";
 import { getAllSocials, insertSocials } from "../../utils/shared-app/socials.js";
 import { mostSearchedsHandler, searchInputHandler } from "../../utils/shared-app/global-search.js";
 import { insertModalCategories } from "../../utils/shared-app/categories-modal.js";
+import { handelModalSubmit } from "../../utils/shared-app/login-modal1.js";
 
 const renderSocials = async () => {
   const socials = await getAllSocials();
@@ -122,10 +123,24 @@ const renderCategoriesModal = () => {
   })
 }
 
-const renderModalClostion = () => {
+const renderLoginModal1 = () => {
   const loginModalCloseBtn = document.querySelector('.login-modal__header-btn')
   loginModalCloseBtn.addEventListener('click', () => {
     hideModal('#login-modal', 'login-modal--active')
+  })
+
+  handelModalSubmit()
+}
+
+const handelCreatePostBtn = () => {
+  const createPostBtn = document.querySelector('.create_post_btn')
+  createPostBtn.addEventListener('click', () => {
+    const isLogin = checkLogin()
+    if (isLogin) {
+      // Go To Create Post Page
+    }else{
+      showModal('#login-modal', 'login-modal--active')
+    }
   })
 }
 ///////    Calling Functions    \\\\\\\\\
@@ -135,7 +150,8 @@ renderCategoriesModal()
 renderGlobalSearch()
 renderSocials() 
 formsPreventDefault()
-renderModalClostion()
+renderLoginModal1()
+handelCreatePostBtn()
 
 
 

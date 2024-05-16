@@ -1,6 +1,5 @@
 import { checkLogin, getUrlParam, hideElem, mainURL, showElem, showModal } from "./shared.js"
 const loginModal = document.querySelector('#login-modal')
-const isLogin = checkLogin()
 
 const getPostInfo = async () => {
   const postID = getUrlParam('id')
@@ -55,7 +54,8 @@ const handelNote = () => {
   
   noteInput.addEventListener('keyup', e => {
     const value = e.target.value.trim();
-    
+    const isLogin = checkLogin()
+
     if (isLogin) {
       if (value) {
         showElem(noteTrashBtn)
@@ -89,6 +89,8 @@ const handelReactions = () => {
 
   reActions.forEach(reAction => {
     reAction.addEventListener('click', () => {
+      const isLogin = checkLogin()
+
       reActions.forEach(reAct => reAct.classList.remove('active'))
 
       if (isLogin) {
