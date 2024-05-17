@@ -10,14 +10,14 @@ const searchInputHandler = () => {
   }
 
   if (event.keyCode == 13) {
-    setParamToUrl("searched", value);
+    location.href = `./posts.html?searched=${value}`
   }
 };
 
 
 ////   Start Most Searched Functions
 const mostSearchClickHandler = searched => {
-  setParamToUrl('searched', searched)
+  location.href = `./posts.html?searched=${searched}`
 }
 
 const generateSearchedItemTemplate = searched => {
