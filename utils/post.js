@@ -228,15 +228,19 @@ const applyBookmark = async () => {
   }
 }
 
+const showLoginModal = () => {
+  showModal('#login-modal', 'login-modal--active')
+}
+
 const handelBookmark = async bookmarked => {
   isBookmarked = bookmarked;
   const bookmarkIcon = document.querySelector('#bookmark-icon-btn .bi.bi-bookmark')
   const isLogin = await checkLogin()
+  let bookmarkClickHandler = null;
   if (!isLogin) {
-    showModal('#login-modal', 'login-modal--active')
-    return false
+    bookmarkClickHandler = showLoginModal
+    
   }
-  let bookmarkClickHandler = null
   
   if (isBookmarked) {
     bookmarkIcon.style.color = "red"
