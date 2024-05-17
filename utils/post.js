@@ -239,7 +239,8 @@ const handelBookmark = async bookmarked => {
   let bookmarkClickHandler = null;
   if (!isLogin) {
     bookmarkClickHandler = showLoginModal
-    
+    bookmarkIcon.onclick = bookmarkClickHandler
+    return false
   }
   
   if (isBookmarked) {
