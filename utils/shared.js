@@ -1,3 +1,5 @@
+import { getMe } from "../public/js/auth.js";
+
 const mainURL = "https://divarapi.liara.run/v1";
 const coverURL = "https://divarapi.liara.run";
 
@@ -12,6 +14,14 @@ const setIntoLocal = (key, value) => {
 
 const getFromLocal = (key) => {
   return JSON.parse(localStorage.getItem(key));
+};
+
+const setIntoSession = (key, value) => {
+  sessionStorage.setItem(key, JSON.stringify(value));
+}
+
+const getFromSession = (key) => {
+  return JSON.parse(sessionStorage.getItem(key));
 };
 
 const setParamToUrl = (param, value) => {
@@ -103,9 +113,11 @@ const getToken = () => {
   return getFromLocal('divar-token')
 }
 
-const checkLogin = () => {
-  const token = getToken()
-  return !!token
+const checkLogin = async () => {
+  const userInfo = getFromSession('divar-user') || await getMe()
+  const isLogin = userInfo?._id && userInfo?.phone
+
+  return !!isLogin
 }
 
 const showSwal = (title, text, icon, buttons, callback) => {
@@ -136,6 +148,8 @@ export {
   hideModal,
   checkLogin,
   showSwal,
-  getToken
+  getToken,
+  setIntoSession,
+  getFromSession
 };
 

@@ -1,4 +1,4 @@
-import { mainURL } from "../../utils/shared.js"
+import { getToken, mainURL, setIntoSession } from "../../utils/shared.js"
 
 const sendCode = async phone => {
   const sendReq = await fetch(`${mainURL}/auth/send`, {
@@ -30,7 +30,23 @@ const verifyUser = async (phoneNumber, otpCode) => {
   return verifyResponse
 }
 
+const getMe = async  () => {
+  const token = getToken();
+  if(!token) return false
+  const getReq = await fetch(`${mainURL}/auth/me`, {
+    method: 'GET',
+    headers:{
+      Authorization : `Bearer ${token}`
+    }
+  })
+  const response = await getReq.json()
+
+  setIntoSession('divar-user', response.data.user)
+  return response.data.user
+}
+
 export{
   sendCode,
-  verifyUser
+  verifyUser,
+  getMe
 }

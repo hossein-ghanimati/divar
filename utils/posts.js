@@ -120,7 +120,7 @@ const getCategories = async () => {
 };
 
 const categoryClickHandler = (categoryID) => {
-  setParamToUrl("categoryID", categoryID);
+  location.href = `./posts.html?categoryID=${categoryID}`;
 };
 
 const generateCategoryTemplate = (category) => {

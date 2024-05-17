@@ -4,6 +4,7 @@ import { getAllSocials, insertSocials } from "../../utils/shared-app/socials.js"
 import { mostSearchedsHandler, searchInputHandler } from "../../utils/shared-app/global-search.js";
 import { insertModalCategories } from "../../utils/shared-app/categories-modal.js";
 import { handelModalSubmit } from "../../utils/shared-app/login-modal1.js";
+import { getMe } from "./auth.js";
 
 const renderSocials = async () => {
   const socials = await getAllSocials();
@@ -107,6 +108,8 @@ const renderCategoriesModal = () => {
   const backToAllCategoriesBtn = document.querySelector('#all-categories-posts')
   const modalOverly = document.querySelector('.category_modal_overlay')
 
+  if (!modalOverly) return false
+
 
   insertModalCategories()
 
@@ -134,14 +137,98 @@ const renderLoginModal1 = () => {
 
 const handelCreatePostBtn = () => {
   const createPostBtn = document.querySelector('.create_post_btn')
-  createPostBtn.addEventListener('click', () => {
-    const isLogin = checkLogin()
+  if (!createPostBtn) return false
+  createPostBtn.addEventListener('click', async () => {
+    const isLogin = await checkLogin()
     if (isLogin) {
       // Go To Create Post Page
     }else{
       showModal('#login-modal', 'login-modal--active')
     }
   })
+}
+
+const renderPanelLinks = async () => {
+  const panelLinksBtn = document.querySelector('.dropdown-toggle')
+  const panelLinksContainer = document.querySelector('.header_dropdown_menu')
+  if (!panelLinksContainer) return false;
+  const isLogin = await checkLogin()
+  const user = await getMe()
+  const linksTemplate = 
+    isLogin ?
+      `
+        <li class="header__left-dropdown-item header_dropdown-item_account">
+          <a
+            href="./userPanel/posts.html"
+            class="header__left-dropdown-link login_dropdown_link"
+          >
+            <i class="header__left-dropdown-icon bi bi-box-arrow-in-left"></i>
+            <div>
+              <span>کاربر دیوار </span>
+              <p>تلفن ${user.phone}</p>
+            </div>
+          </a>
+        </li>
+        <li class="header__left-dropdown-item">
+          <a class="header__left-dropdown-link" href="./userPanel/verify.html">
+            <i class="header__left-dropdown-icon bi bi-bookmark"></i>
+            تایید هویت
+          </a>
+        </li>
+        <li class="header__left-dropdown-item">
+          <a class="header__left-dropdown-link" href="./userPanel/bookmarks.html">
+            <i class="header__left-dropdown-icon bi bi-bookmark"></i>
+            نشان ها
+          </a>
+        </li>
+        <li class="header__left-dropdown-item">
+          <a class="header__left-dropdown-link" href="./userPanel/notes.html">
+            <i class="header__left-dropdown-icon bi bi-journal"></i>
+            یادداشت ها
+          </a>
+        </li>
+        <li class="header__left-dropdown-item logout-link" id="login_btn">
+          <p class="header__left-dropdown-link" href="#">
+            <i class="header__left-dropdown-icon bi bi-shop"></i>
+            خروج
+          </p>
+        </li>
+      `
+    :
+      `
+        <li class="header__left-dropdown-item">
+          <span id="login-btn" class="header__left-dropdown-link login_dropdown_link">
+            <i class="header__left-dropdown-icon bi bi-box-arrow-in-left"></i>
+            ورود
+          </span>
+        </li>
+        <li class="header__left-dropdown-item">
+          <div class="header__left-dropdown-link" href="#">
+            <i class="header__left-dropdown-icon bi bi-bookmark"></i>
+            نشان ها
+          </div>
+        </li>
+        <li class="header__left-dropdown-item">
+          <div class="header__left-dropdown-link" href="#">
+            <i class="header__left-dropdown-icon bi bi-journal"></i>
+            یادداشت ها
+          </div>
+        </li>
+        <li class="header__left-dropdown-item">
+          <div class="header__left-dropdown-link" href="#">
+            <i class="header__left-dropdown-icon bi bi-clock-history"></i>
+            بازدید های اخیر
+          </div>
+        </li>
+      `
+
+  panelLinksContainer.insertAdjacentHTML('beforeend', linksTemplate)
+
+  if (!isLogin) {
+    panelLinksContainer.addEventListener('click', () => {
+      showModal('#login-modal', 'login-modal--active')
+    })
+  }
 }
 ///////    Calling Functions    \\\\\\\\\
 renderHeaderCities()
@@ -152,6 +239,7 @@ renderSocials()
 formsPreventDefault()
 renderLoginModal1()
 handelCreatePostBtn()
+renderPanelLinks(0)
 
 
 

@@ -1,5 +1,5 @@
-import { getPostInfo, insertBreadCrumb, insertFields,handelNote ,handelReactions } from "../../utils/post.js";
-import { calculateRelativeTimeDifference, hideLoader, showSwal } from "../../utils/shared.js";
+import { getPostInfo, insertBreadCrumb, insertFields,handelNote ,handelReactions, handelBookmark, handelPicsSliders } from "../../utils/post.js";
+import { calculateRelativeTimeDifference, hideElem, hideLoader, showSwal } from "../../utils/shared.js";
 
 
 /////////////////       Variabels       \\\\\\\\\\\\\\\\\\\
@@ -34,19 +34,26 @@ const renderPostInfo = async () => {
     })
   })
 
+  if (post.pics.length) {
+    handelPicsSliders(post.pics)
+  }else{
+    hideElem(document.querySelector('#post-preview'))
+  }
+
   insertFields(post)
 
-  handelNote()
+  handelNote(post.note)
+  handelBookmark(post.bookmarked)
   handelReactions();
 
 }
 
-const pageFuncsHandler = () => {
-  renderPostInfo()
+const pageFuncsHandler = async () => {
+  await renderPostInfo()
 }
 
 /////////////////       Events / Codes       \\\\\\\\\\\\\\\\\\\
-window.addEventListener("load", async () => {
+window.addEventListener("DOMContentLoaded", async () => {
   if (!location.pathname.endsWith('post.html')) return false
   await pageFuncsHandler();
   hideLoader();
