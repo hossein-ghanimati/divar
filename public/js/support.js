@@ -1,5 +1,5 @@
 import { hideLoader } from "../../utils/shared.js"
-import { generateArticleCategoryTemplate, generatePopArticleTemplate, getAllArticles } from "../../utils/sopport.js";
+import { generateArticleCategoryTemplate, generatePopArticleTemplate, getAllArticles, searchArticle, handelRemoveBtn } from "../../utils/sopport.js";
 /////////////////       Variabels       \\\\\\\\\\\\\\\\\\\
 let popularArticles = null;
 let articlesCategories = null;
@@ -31,8 +31,20 @@ const renderArticlesCategory = () => {
   })
 }
 
+const handelArticleSearch = () => {
+  const searchInput = document.querySelector('#search-input')
+  const searchBtn = document.querySelector('.input-search-icon')
+
+  searchInput.addEventListener('keyup', e => {
+    searchArticle(e.keyCode)
+  })
+
+  handelRemoveBtn()
+}
+
 const renderPageFuncs = async () => {
   await loadAllArticles()
+  handelArticleSearch(0)
   renderPopularArticles();
   renderArticlesCategory()
 }

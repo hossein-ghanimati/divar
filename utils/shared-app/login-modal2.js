@@ -59,7 +59,7 @@ const renderLoginModal2 = phoneNumber => {
 }
 
 const verifyBtn = document.querySelector('.login_btn')
-verifyBtn.addEventListener('click', async () => {
+verifyBtn?.addEventListener('click', async () => {
   const phoneNumber = phoneElem.innerText.trim()
   const otpCode = otpInput.value.trim()
   const otpRegex = RegExp(/^\d{4}$/)

@@ -128,6 +128,7 @@ const renderCategoriesModal = () => {
 
 const renderLoginModal1 = () => {
   const loginModalCloseBtn = document.querySelector('.login-modal__header-btn')
+  if (!loginModalCloseBtn) return false
   loginModalCloseBtn.addEventListener('click', () => {
     hideModal('#login-modal', 'login-modal--active')
   })

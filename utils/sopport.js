@@ -1,9 +1,17 @@
 import { coverURL, mainURL } from "./shared.js"
+const searchInput = document.querySelector('#search-input')
+const searchResultEl = document.querySelector("#search-result")
+const removeInputValueEl = document.querySelector('#remove-icon')
+const articles = [];
 
 const getAllArticles = async () =>{
   const res = await fetch(`${mainURL}/support/category-articles`);
   const response = await res.json();
-
+  response.data.categories.forEach(category => {
+    category.articles.forEach(article => {
+      articles.push(article)
+    });
+  });
   return response.data.categories;
 }
 
@@ -32,8 +40,74 @@ const generateArticleCategoryTemplate = category => `
   </a>
 `
 
+const showInputAttachs = () => {
+  searchResultEl.classList.add('active')
+  removeInputValueEl.classList.add('active')
+}
+
+const hideInputAttachs = () => {
+  searchResultEl.classList.remove('active')
+  removeInputValueEl.classList.remove('active')
+}
+
+const handelRemoveBtn = () => {
+  removeInputValueEl.addEventListener('click', () => {
+    hideInputAttachs()
+    searchInput.value = ''
+  })
+}
+
+const generateStaticSearchItemTemplate = searchedValue => `
+  <a href="./support/search.html?value=${searchedValue}">
+    <i class="bi bi-search"></i>
+    ${searchedValue}
+  </a>
+`
+
+const insertStaticSearchItem = searchedValue => {
+  searchResultEl.insertAdjacentHTML('beforeend', generateStaticSearchItemTemplate(searchedValue))
+}
+
+const generateSearchedItemTemplate = article => `
+  <a href="./support/article.html?id=${article._id}">
+    <i class="bi bi-card-text"></i>
+    ${article.title}
+  </a>
+`
+
+const insertSearchedItems = filteredArticles => {
+  filteredArticles.forEach(article => {
+    searchResultEl.insertAdjacentHTML('beforeend', generateSearchedItemTemplate(article))
+  })
+}
+
+
+const searchArticle = keyCode => {
+  searchResultEl.innerHTML = ''
+  const searchValue = searchInput.value.trim();
+  if (keyCode == 13) {
+    location.href = `./support/search.html?value=${searchValue}`
+    return false
+  }
+  
+  if (searchValue) {
+    showInputAttachs()
+    const filteredArticles = articles.filter(article => article.title.includes(searchValue))
+    if (filteredArticles.length) {
+      insertStaticSearchItem(searchValue)
+      insertSearchedItems(filteredArticles)
+    }else{
+      insertStaticSearchItem(searchValue)
+    }
+  }else{
+    hideInputAttachs()
+  }
+}
+
 export{
   getAllArticles,
   generatePopArticleTemplate,
-  generateArticleCategoryTemplate
+  generateArticleCategoryTemplate,
+  searchArticle,
+  handelRemoveBtn
 }
