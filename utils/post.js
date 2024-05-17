@@ -40,17 +40,17 @@ const insertBreadCrumb = post => {
 
   breadCrumbContainer.innerHTML = `
       <li class="main__breadcrumb-item">
-        <a href='/pages/posts.html?categoryID=${post.breadcrumbs.category._id}' id="category-breadcrumb">${post.breadcrumbs.category.title}</a>
+        <a href='./posts.html?categoryID=${post.breadcrumbs.category._id}' id="category-breadcrumb">${post.breadcrumbs.category.title}</a>
         <i class="main__breadcrumb-icon bi bi-chevron-left"></i>
       </li>
 
       <li class="main__breadcrumb-item">
-        <a href='/pages/posts.html?categoryID=${post.breadcrumbs.subCategory._id}' id="category-breadcrumb">${post.breadcrumbs.subCategory.title}</a>
+        <a href='./posts.html?categoryID=${post.breadcrumbs.subCategory._id}' id="category-breadcrumb">${post.breadcrumbs.subCategory.title}</a>
         <i class="main__breadcrumb-icon bi bi-chevron-left"></i>
       </li>
 
       <li class="main__breadcrumb-item">
-        <a href='/pages/posts.html?categoryID=${post.breadcrumbs.subSubCategory._id}' id="category-breadcrumb">${post.breadcrumbs.subSubCategory.title}</a>
+        <a href='./posts.html?categoryID=${post.breadcrumbs.subSubCategory._id}' id="category-breadcrumb">${post.breadcrumbs.subSubCategory.title}</a>
         <i class="main__breadcrumb-icon bi bi-chevron-left"></i>
       </li>
 
