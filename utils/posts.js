@@ -270,7 +270,7 @@ const generateCheckboxFilterTemplate = (filter) => {
   return `
   <div class="sidebar__filter">
     <label class="switch">
-      <input class="icon-controll filter" type="checkbox" />
+      <input class="icon-controll filter" type="checkbox" onchange="dynamicFiltersApplyHandler(event.target.checked, '${filter.slug}')"/>
       <span class="slider round"></span>
     </label>
     <p>${filter.name}</p>
@@ -300,7 +300,7 @@ const generateSelectboxFilterTemplate = (filter) => {
           data-bs-parent="#accordionFlushExample"
         >
           <div class="accordion-body">
-            <select class="selectbox" onchange="dynamicSelectFiltersApplyHandler(event.target.value, '${filter.slug}')">
+            <select class="selectbox" onchange="dynamicFiltersApplyHandler(event.target.value, '${filter.slug}')">
               <option value='default'>پیش فرض</option>
               ${filter.options
                 .sort((a, b) => b - a)
@@ -431,20 +431,17 @@ const staticSelectFiltersApplyHandler = () => {
   })
 };
 
-const dynamicSelectFiltersApplyHandler = (value, slug) => {
+const dynamicFiltersApplyHandler = (value, slug) => {
   dynamicFilters[slug] = value;
-
 
 
   const filteredPosts = applyAllFilterings()
   insertPosts(filteredPosts)
 };
 
-const dynamicCheckFiltersApplyHandler = () => {};
-
 window.categoryClickHandler = categoryClickHandler;
 window.backToAllCategories = backToAllCategories;
-window.dynamicSelectFiltersApplyHandler = dynamicSelectFiltersApplyHandler
+window.dynamicFiltersApplyHandler = dynamicFiltersApplyHandler
 export {
   getPosts,
   insertPosts,
@@ -454,6 +451,5 @@ export {
   insertFilters,
   staticCheckFiltersApplyHandler,
   staticSelectFiltersApplyHandler,
-  dynamicCheckFiltersApplyHandler,
   categoryClickHandler
 };

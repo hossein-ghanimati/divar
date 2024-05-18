@@ -7,7 +7,6 @@ import {
   insertFilters,
   staticCheckFiltersApplyHandler,
   staticSelectFiltersApplyHandler,
-  dynamicCheckFiltersApplyHandler,
 } from "../../utils/posts.js";
 import { getFromLocal, getUrlParam, hideLoader, setIntoLocal } from "../../utils/shared.js";
 
@@ -53,7 +52,6 @@ const renderFilters = () => {
 const filstersApplyHandler = () => {
   staticCheckFiltersApplyHandler();
   staticSelectFiltersApplyHandler();
-  dynamicCheckFiltersApplyHandler();
 }
 
 const pageFuncsHandler = async () => {
