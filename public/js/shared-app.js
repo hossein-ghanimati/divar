@@ -140,9 +140,14 @@ const handelCreatePostBtn = () => {
   const createPostBtn = document.querySelector('.create_post_btn')
   if (!createPostBtn) return false
   createPostBtn.addEventListener('click', async () => {
+    try{
+      hideModal('.header__category-menu', 'header__category-menu--active')
+      hideModal('.city-modal', 'city-modal--active')
+      hideElem('.header__searchbar-dropdown', "header__searchbar-dropdown--active")
+    }catch{}
     const isLogin = await checkLogin()
     if (isLogin) {
-      // Go To Create Post Page
+      location.href = "./new.html"
     }else{
       showModal('#login-modal', 'login-modal--active')
     }

@@ -18,7 +18,7 @@ const insertSocials = socials => {
   const socialsContainer = document.querySelector('#footer__social-media')
 
   socials.forEach(social => {
-    socialsContainer.insertAdjacentHTML('beforeend', generateSocialTemplate(social))
+    socialsContainer?.insertAdjacentHTML('beforeend', generateSocialTemplate(social))
   });
 }
 
