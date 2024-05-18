@@ -385,8 +385,7 @@ const filterByDynamicFileds = posts => {
     if (dynamicFilters[slug] == "default") continue
     filteredPosts = filteredPosts.filter(post => {
       return post.dynamicFields.some(field => {
-      
-        return field.slug == slug && field.data == dynamicFilters[slug]
+        return field.slug == slug && field.data == `${dynamicFilters[slug]}`
       })
     })
     
@@ -433,7 +432,7 @@ const staticSelectFiltersApplyHandler = () => {
 
 const dynamicFiltersApplyHandler = (value, slug) => {
   dynamicFilters[slug] = value;
-
+  console.log(dynamicFilters);
 
   const filteredPosts = applyAllFilterings()
   insertPosts(filteredPosts)
