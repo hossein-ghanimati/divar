@@ -2,7 +2,7 @@ import {
   getPosts,
   insertPosts,
   getCategories,
-  insertMainCategories,
+  insertCategories,
   handelMainCategories,
   insertFilters,
   staticCheckFiltersApplyHandler,
@@ -34,7 +34,7 @@ const renderCategories = async () => {
     handelMainCategories(categories, categoryID);
   } else {
     setIntoLocal('category', categories)
-    insertMainCategories(categories);
+    insertCategories(categories);
 
     console.log("Categories =>", categories);
   }

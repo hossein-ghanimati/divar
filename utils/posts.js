@@ -134,7 +134,7 @@ const generateCategoryTemplate = (category) => {
   `;
 };
 
-const insertMainCategories = (categories) => {
+const insertCategories = (categories) => {
   const categoriesContainer = document.querySelector("#categories-container");
 
   categories.forEach((category) => {
@@ -449,7 +449,7 @@ export {
   getPosts,
   insertPosts,
   getCategories,
-  insertMainCategories,
+  insertCategories,
   handelMainCategories,
   insertFilters,
   staticCheckFiltersApplyHandler,
