@@ -8,6 +8,11 @@ const hideLoader = () => {
   loaderElem.style.display = "none";
 };
 
+const showLoader = () => {
+  const loaderElem = document.querySelector("#loading-container");
+  loaderElem.style.display = "flex";
+}
+
 const setIntoLocal = (key, value) => {
   localStorage.setItem(key, JSON.stringify(value));
 };
@@ -136,6 +141,7 @@ export {
   mainURL,
   coverURL,
   hideLoader,
+  showLoader,
   setIntoLocal,
   getFromLocal,
   setParamToUrl,
