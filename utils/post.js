@@ -318,5 +318,5 @@ export {
   handelNote,
   handelBookmark,
   handelReactions,
-  handelPicsSliders
+  handelPicsSliders,
 }

@@ -23,7 +23,7 @@ const renderPostInfo = async () => {
 
   const shareBtn = document.querySelector('#share-icon')
   shareBtn.addEventListener('click', () => {
-    navigator?.share(location.href);
+    navigator?.share({url: location.href});
   })
 
   const phoneInfoBtn = document.querySelector('#phone-info-btn')
