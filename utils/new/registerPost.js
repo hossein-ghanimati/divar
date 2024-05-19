@@ -82,7 +82,6 @@ const validateElValue = el => el.value.trim() != ''
 const statisFieldsValidation = () => {
   let areAllFields= false;
   if (
-      neighborhoodSelector.value != "default" && 
       validateElValue(priceEl) && 
       validateElValue(titleEl) && 
       validateElValue(descriptionEl)
@@ -159,7 +158,7 @@ const handelNeighborhoods = neighborhoods => {
   neighborhoodChoice.clearStore();
   neighborhoodChoice.setChoices([
     {
-      value: "default",
+      value: 0,
       label: "انتخاب محله", 
       selected: true, 
       disabled: true
