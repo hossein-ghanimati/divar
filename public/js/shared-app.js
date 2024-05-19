@@ -1,5 +1,5 @@
 import { deleteAllCitiesHandler, loadSelectedCities, modalAcceptBtnHandler, renderAllProvinces, renderCitiesSearching, renderProvinseCities } from "../../utils/shared-app/cities-modal.js";
-import { checkLogin, getFromLocal, getUrlParam, hideElem, hideModal, removeUrlParam, setIntoLocal, setParamToUrl, showElem, showModal } from "../../utils/shared.js";
+import { checkLogin, getFromLocal, getUrlParam, hideElem, hideModal, removeUrlParam, setIntoLocal, setParamToUrl, showElem, showLoader, showModal } from "../../utils/shared.js";
 import { getAllSocials, insertSocials } from "../../utils/shared-app/socials.js";
 import { mostSearchedsHandler, searchInputHandler } from "../../utils/shared-app/global-search.js";
 import { insertModalCategories } from "../../utils/shared-app/categories-modal.js";
@@ -158,6 +158,7 @@ const renderPanelLinks = async () => {
   const panelLinksBtn = document.querySelector('.dropdown-toggle')
   const panelLinksContainer = document.querySelector('.header_dropdown_menu')
   if (!panelLinksContainer) return false;
+  const locationPath = location.pathname
   const isLogin = await checkLogin()
   const user = await getMe()
   const linksTemplate = 
@@ -165,7 +166,7 @@ const renderPanelLinks = async () => {
       `
         <li class="header__left-dropdown-item header_dropdown-item_account">
           <a
-            href="./userPanel/posts.html"
+            href="${locationPath.includes('userPanel') ? '../' : './'}userPanel/posts.html"
             class="header__left-dropdown-link login_dropdown_link"
           >
             <i class="header__left-dropdown-icon bi bi-box-arrow-in-left"></i>
@@ -176,24 +177,24 @@ const renderPanelLinks = async () => {
           </a>
         </li>
         <li class="header__left-dropdown-item">
-          <a class="header__left-dropdown-link" href="./userPanel/verify.html">
+          <a class="header__left-dropdown-link" href="${locationPath.includes('userPanel') ? '../' : './'}userPanel/verify.html">
             <i class="header__left-dropdown-icon bi bi-bookmark"></i>
             تایید هویت
           </a>
         </li>
         <li class="header__left-dropdown-item">
-          <a class="header__left-dropdown-link" href="./userPanel/bookmarks.html">
+          <a class="header__left-dropdown-link" href="${locationPath.includes('userPanel') ? '../' : './'}userPanel/bookmarks.html">
             <i class="header__left-dropdown-icon bi bi-bookmark"></i>
             نشان ها
           </a>
         </li>
         <li class="header__left-dropdown-item">
-          <a class="header__left-dropdown-link" href="./userPanel/notes.html">
+          <a class="header__left-dropdown-link" href="${locationPath.includes('userPanel') ? '../' : './'}userPanel/notes.html">
             <i class="header__left-dropdown-icon bi bi-journal"></i>
             یادداشت ها
           </a>
         </li>
-        <li class="header__left-dropdown-item logout-link" id="login_btn">
+        <li class="header__left-dropdown-item logout-link" id="login_out" onclick="logoutHandler()">
           <p class="header__left-dropdown-link" href="#">
             <i class="header__left-dropdown-icon bi bi-shop"></i>
             خروج
@@ -236,6 +237,14 @@ const renderPanelLinks = async () => {
     })
   }
 }
+
+const logoutHandler = () => {
+  console.log('logouting ...');
+  showLoader()
+  localStorage.removeItem('divar-token') 
+  sessionStorage.removeItem('divar-user')
+  window.location.reload()
+}
 ///////    Calling Functions    \\\\\\\\\
 renderHeaderCities()
 renderCitiesModal()
@@ -246,9 +255,10 @@ formsPreventDefault()
 renderLoginModal1()
 handelCreatePostBtn()
 renderPanelLinks(0)
-
+window.logoutHandler = logoutHandler
 
 
 export{
   renderHeaderCities,
+  logoutHandler
 }
