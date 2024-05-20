@@ -9,11 +9,6 @@ const renderBookmarks = async () => {
   const bookmarksData = await getBookmarksData()
   const bookmarks = bookmarksData.posts
 
-  const staticHref = location.href
-  const word = '.html'
-  const index = staticHref.indexOf(word)
-  const href = staticHref.slice(0, index + word.length)
-
   renderPagination(
    bookmarksData.pagination.totalPages,
    bookmarksData.pagination.page

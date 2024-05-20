@@ -1,5 +1,4 @@
 import{checkLogin, getFromSession, hideLoader} from "../../../utils/shared.js"
-import { logoutHandler } from "../shared-app.js"
 
 const renderFuncs = async ()  => {
   const isLogin = await checkLogin()
@@ -19,5 +18,15 @@ const renderFuncs = async ()  => {
     logoutHandler()
   })
 }
+
+const logoutHandler = () => {
+  console.log('logouting ...');
+  showLoader()
+  localStorage.removeItem('divar-token') 
+  sessionStorage.removeItem('divar-user')
+  window.location.reload()
+}
+
+window.logoutHandler
 
 renderFuncs()

@@ -1,4 +1,4 @@
-import { checkLogin, coverURL, getFromLocal, getToken, getUrlParam, hideElem, mainURL, setIntoLocal, showElem, showModal, showSwal } from "./shared.js"
+import { checkLogin, coverURL, getFromLocal, getFromSession, getToken, getUrlParam, hideElem, mainURL, setIntoLocal, setIntoSession, showElem, showModal, showSwal } from "./shared.js"
 const loginModal = document.querySelector('#login-modal')
 const noteInput = document.querySelector('#note-textarea')
 let noteFirstValue = null;
@@ -311,12 +311,12 @@ const handelPicsSliders = pics => {
 }
 
 const handelPostRecentSeen = postID => {
-  const recentSeens = getFromLocal('divar-recent-seens',) || []
+  const recentSeens = getFromSession('divar-recent-seens',) || []
   const isPostRecent = recentSeens?.some(recentSeen => recentSeen == postID)
 
   if (!isPostRecent){
     recentSeens.push(postID)
-    setIntoLocal('divar-recent-seens', recentSeens)
+    setIntoSession('divar-recent-seens', recentSeens)
   }
 }
 

@@ -260,5 +260,4 @@ window.logoutHandler = logoutHandler
 
 export{
   renderHeaderCities,
-  logoutHandler
 }
