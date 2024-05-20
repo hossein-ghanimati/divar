@@ -1097,3 +1097,25 @@ display: block !important;
    /* !=======================================Loading!======================================= */
 
    
+.pagination-wrapper{
+  display: flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 35px;
+  margin-bottom:30px;
+}
+
+.pagination-wrapper a{
+  padding: 5px 10px;
+  background-color: #f0f0f0;
+  color: #a62626;
+  border-radius: 4px;
+
+}
+.pagination-wrapper .active a{
+  background-color: #a62626;
+  color: #dadada;
+  
+}

@@ -1,5 +1,16 @@
 import { renderBookmarks } from "../../public/js/userPanel/bookmarks.js"
-import { calculateRelativeTimeDifference, coverURL, getToken, mainURL, showSwal } from "../shared.js"
+import { calculateRelativeTimeDifference, coverURL, getToken, getUrlParam, mainURL, showSwal } from "../shared.js"
+
+const getBookmarksData = async () => {
+  const page = getUrlParam('page') || 1
+  const getReq = await fetch(`${mainURL}/user/bookmarks?page=${page}&limit=4`,{
+    headers: {
+      Authorization: `Bearer ${getToken()}`
+    }
+  })
+  const response = await getReq.json();
+  return response.data
+}
 
 const generateBookmarkTemplate = bookmark => {
   const date = calculateRelativeTimeDifference(bookmark.createdAt)
@@ -65,5 +76,6 @@ window.removeBookmark =  (id, title) => {
 }
 
 export{
-  generateBookmarkTemplate
+  generateBookmarkTemplate,
+  getBookmarksData
 }

@@ -1,4 +1,4 @@
-import { checkLogin, coverURL, getToken, getUrlParam, hideElem, mainURL, showElem, showModal, showSwal } from "./shared.js"
+import { checkLogin, coverURL, getFromLocal, getToken, getUrlParam, hideElem, mainURL, setIntoLocal, showElem, showModal, showSwal } from "./shared.js"
 const loginModal = document.querySelector('#login-modal')
 const noteInput = document.querySelector('#note-textarea')
 let noteFirstValue = null;
@@ -61,7 +61,7 @@ const insertBreadCrumb = post => {
 const generateFieldTemplate = field => `
   <li class="post__info-item">
     <span class="post__info-key">${field.name}</span>
-    <span class="post__info-value">${field.data === false ? 'ندارد' : field.data}</span>
+    <span class="post__info-value">${field.data === false ? 'ندارد' : field.data === true ? 'دارد' : field.data}</span>
   </li>
 `
 
@@ -310,6 +310,16 @@ const handelPicsSliders = pics => {
   })
 }
 
+const handelPostRecentSeen = postID => {
+  const recentSeens = getFromLocal('divar-recent-seens',) || []
+  const isPostRecent = recentSeens?.some(recentSeen => recentSeen == postID)
+
+  if (!isPostRecent){
+    recentSeens.push(postID)
+    setIntoLocal('divar-recent-seens', recentSeens)
+  }
+}
+
 
 export {
   getPostInfo,
@@ -319,4 +329,5 @@ export {
   handelBookmark,
   handelReactions,
   handelPicsSliders,
+  handelPostRecentSeen
 }

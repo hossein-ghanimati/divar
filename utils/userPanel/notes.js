@@ -1,14 +1,15 @@
 import { renderNotes } from "../../public/js/userPanel/notes.js"
-import { calculateRelativeTimeDifference, getToken,coverURL, mainURL, showSwal } from "../shared.js"
+import { calculateRelativeTimeDifference, getToken,coverURL, mainURL, showSwal, getUrlParam } from "../shared.js"
 
-const getNotes = async () => {
-  const getReq = await fetch(`${mainURL}/user/notes`, {
+const getNotesData = async () => {
+  const page = getUrlParam('page') || 1
+  const getReq = await fetch(`${mainURL}/user/notes?limit=4&page=${page}`, {
     headers: {
       Authorization: `Bearer ${getToken()}`
     }
   })
   const response = await getReq.json()
-  return response.data.posts
+  return response.data
 }
 
 const generateNoteTemplate = post => {
@@ -55,5 +56,5 @@ window.removeNote = noteID => {
 
 export{
   generateNoteTemplate,
-  getNotes
+  getNotesData
 }

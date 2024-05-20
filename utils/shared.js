@@ -136,6 +136,24 @@ const showSwal = (title, text, icon, buttons, callback) => {
   })
 }
 
+const renderPagination = (totalPages, currentPage) => {
+  const container  = document.querySelector('#pagination')
+  container.innerHTML = '';
+  if(totalPages < 2) return false
+  
+  const staticHref = location.href
+  const word = '.html'
+  const index = staticHref.indexOf(word)
+  const href = staticHref.slice(0, index + word.length)
+  for (let i = 1; i <= + totalPages; i++) {
+    container.insertAdjacentHTML('beforeend', `
+      <li ${i == currentPage ? 'class="active"' : ''}>
+        <a href="${href}?page=${i}">${i}</a>
+      </li>
+    `)    
+  }
+}
+
 
 export {
   mainURL,
@@ -156,6 +174,7 @@ export {
   showSwal,
   getToken,
   setIntoSession,
-  getFromSession
+  getFromSession,
+  renderPagination
 };
 

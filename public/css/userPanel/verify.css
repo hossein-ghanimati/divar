@@ -1,5 +1,13 @@
 @import url(./share.css);
 
+.verify-icon{
+    width: 200px;
+    height: 200px;
+    font-size: 200px;
+    color: #00a700;
+    margin: 3rem auto;
+}
+
 .verify {
     max-width: 50rem;
     margin: 2rem auto;

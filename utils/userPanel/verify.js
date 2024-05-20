@@ -1,16 +1,17 @@
 import {getToken, mainURL} from "../shared.js"
 
-const getBookmark = async () => {
-  const getReq = await fetch(`${mainURL}/user/bookmarks`, {
+const verifyUser = async nationalCode => {
+  console.log(nationalCode);
+  return await fetch(`${mainURL}/user/identity`, {
+    method: 'POST',
     headers: {
-      Authorization: `Bearer ${getToken()}`
-    }
+      Authorization: `Bearer ${getToken()}`,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({nationalCode})
   })
-
-  const response = await getReq.json()
-  return response.data.posts
 }
 
 export {
-  getBookmark
+  verifyUser
 }
