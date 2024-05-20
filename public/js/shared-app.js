@@ -70,10 +70,11 @@ const renderCitiesModal = () => {
   const modalActiveClass = "city-modal--active"
   const modalID = "#city-modal"
   const modalOpenBtn = document.querySelector('.header__city')
-  if (!modalOpenBtn) return false
   const modalCloseBtn = document.querySelector('.city-modal__close')
   const modalAcceptBtn = document.querySelector('.city-modal__accept')
   const modalOverly = document.querySelector('.city-modal__overlay')
+  
+  if (!modalOpenBtn || modalOverly || modalAcceptBtn) return false
 
   deleteAllCitiesHandler()
   renderCitiesSearching()

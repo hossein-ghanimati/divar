@@ -166,7 +166,7 @@ const loadSelectedCities = (city) => {
 };
 
 const deleteAllCitiesHandler = () => {
-  selectedCitiesDeleteBtn.addEventListener("click", () => {
+  selectedCitiesDeleteBtn?.addEventListener("click", () => {
     setIntoLocal("edited-cities", []);
     loadSelectedCities([]);
     renderAllProvinces();
