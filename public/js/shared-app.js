@@ -74,7 +74,7 @@ const renderCitiesModal = () => {
   const modalAcceptBtn = document.querySelector('.city-modal__accept')
   const modalOverly = document.querySelector('.city-modal__overlay')
   
-  if (!modalOpenBtn || modalOverly || modalAcceptBtn) return false
+  if (!modalOpenBtn || !modalOverly || !modalAcceptBtn) return false
 
   deleteAllCitiesHandler()
   renderCitiesSearching()
