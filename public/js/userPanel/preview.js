@@ -1,5 +1,5 @@
 import { calculateRelativeTimeDifference, showSwal } from "../../../utils/shared.js";
-import { deletePost, getPostData, renderMap } from "../../../utils/userPanel/preview.js";
+import { deletePost, getPostData, renderMap, showPostFields } from "../../../utils/userPanel/preview.js";
 import { insertFields} from "../../../utils/post.js"
 
 
@@ -46,11 +46,16 @@ const renderDeletePost = () => {
   })
 } 
 
+const renderEditPost = () => {
+  showPostFields()
+}
+
 
 
 const pageFuncsHandler = async () => {
   await showPostPreview()
   renderDeletePost()
+  renderEditPost()
 }
 
 pageFuncsHandler()
