@@ -167,7 +167,7 @@ const renderPanelLinks = async () => {
       `
         <li class="header__left-dropdown-item header_dropdown-item_account">
           <a
-            href="${locationPath.includes('userPanel') ? '../' : './'}userPanel/posts.html"
+            href="${locationPath.includes('userPanel') ? '../' : './'}userPanel/user-posts.html"
             class="header__left-dropdown-link login_dropdown_link"
           >
             <i class="header__left-dropdown-icon bi bi-box-arrow-in-left"></i>
