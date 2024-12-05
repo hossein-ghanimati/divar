@@ -1,4 +1,4 @@
-import{checkLogin, getFromSession, hideLoader} from "../../../utils/shared.js"
+import{checkLogin, getFromSession, hideLoader, showLoader} from "../../../utils/shared.js"
 
 const renderFuncs = async ()  => {
   const isLogin = await checkLogin()
