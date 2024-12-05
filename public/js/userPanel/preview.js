@@ -36,7 +36,7 @@ const renderDeletePost = () => {
           if (res.status == 200) {
             showSwal('آگهی با موفقیت حذف شد', null, 'success', 'مشاهده آگهی ها', result => {
               if (result) {
-                location.href = "./posts.html"
+                location.href = "./user-posts.html"
               }
             })
           }
